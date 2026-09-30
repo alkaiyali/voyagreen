@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -5,8 +6,9 @@ import Animated, { FadeIn, FadeInDown } from 'react-native-reanimated';
 import { BottomBar, Button, C, DaysStepper, F, SwapCompare, T, TopBar, tone } from '@/components/ui';
 import { Icon, type IconName } from '@/components/icons';
 import { DestPhoto } from '@/components/photo';
+import { StopPicker, type Placed } from '@/components/stop-picker';
 import { DESTINATIONS, TIPS } from '@/data/destinations';
-import { buildItinerary, dest, level, score, useTrip } from '@/lib/trip';
+import { buildItinerary, dest, FREE, level, planWithEdits, score, tripKey, useTrip, type Stop } from '@/lib/trip';
 
 export function generateStaticParams() {
   return Object.keys(DESTINATIONS).map((id) => ({ id }));
@@ -19,11 +21,32 @@ const SLOT: Record<string, { icon: IconName; label: string }> = {
 // Demo step 3: the itinerary, with the swap's impact up top and Save always in reach.
 export default function TripScreen() {
   const { id, from } = useLocalSearchParams<{ id: string; from?: string }>();
-  const { days, setDays, interests, saveTrip, isSaved } = useTrip();
+  const { days, setDays, interests, saveTrip, isSaved, edits: allEdits, setEdits } = useTrip();
   const d = dest(id), sd = score(d), lv = level(sd), t = tone(lv.tone);
   const o = from ? dest(from) : undefined, so = o ? score(o) : 0;
-  const plan = buildItinerary(d, days, interests);
+  const key = tripKey(id!, from ?? id!);
+  const edits = allEdits[key] ?? {};
+  const suggested = buildItinerary(d, days, interests);
+  const plan = planWithEdits(d, days, interests, edits);
+  const changed = plan.some((stops, i) => stops.some((st, k) => st.t !== suggested[i][k].t));
   const saved = isSaved(id!, from ?? id!);
+  const [editing, setEditing] = useState<{ day: number; k: number } | null>(null);
+  const cur = editing ? plan[editing.day]?.[editing.k] : undefined;
+
+  // Where each activity sits now, so the picker can offer a swap.
+  const placed: Record<string, Placed> = {};
+  plan.forEach((stops, i) => stops.forEach((st) => { if (st.t !== FREE.t) placed[st.t] = { day: i, slot: st.slot }; }));
+
+  const pick = (next: Omit<Stop, 'slot'>) => {
+    if (!editing || !cur) return;
+    const e = { ...edits, [`${editing.day}-${editing.k}`]: { ...next, slot: cur.slot } };
+    // Already elsewhere in the plan? Swap the two instead of duplicating it.
+    plan.forEach((stops, i) => stops.forEach((st, k) => {
+      if (st.t === next.t && next.t !== FREE.t && !(i === editing.day && k === editing.k)) e[`${i}-${k}`] = { ...cur, slot: st.slot };
+    }));
+    setEdits(key, e);
+    setEditing(null);
+  };
   // Kept a high-pressure place? Offer the swap once more, gently.
   const nudge = !o && d.alt && sd >= 45 ? d.alt : undefined;
 
@@ -67,7 +90,7 @@ export default function TripScreen() {
         <View style={s.lengthRow}>
           <View style={{ flex: 1 }}>
             <T.Label>Trip length</T.Label>
-            <T.Muted style={{ fontSize: 12 }}>Days rebuild as you change it</T.Muted>
+            <T.Muted style={{ fontSize: 12 }}>Your changes are kept</T.Muted>
           </View>
           <DaysStepper value={days} onChange={(n) => {
             setDays(n);
@@ -75,36 +98,58 @@ export default function TripScreen() {
           }} />
         </View>
 
+        <View style={s.editHint}>
+          <Icon name="edit" size={16} color={C.textMuted} />
+          <T.Muted style={{ flex: 1, fontSize: 13 }}>Tap any stop to swap it, move it or free up the slot.</T.Muted>
+          {changed && (
+            <Pressable onPress={() => setEdits(key, {})} accessibilityRole="button" hitSlop={8} style={({ pressed }) => [s.reset, pressed && { opacity: 0.6 }]}>
+              <T.Body style={{ fontFamily: F.bold, fontSize: 13, color: C.accentText }}>Reset to suggested</T.Body>
+            </Pressable>
+          )}
+        </View>
+
         {plan.map((stops, i) => (
           <Animated.View key={`${days}-${i}`} entering={FadeIn.duration(250)} style={s.day}>
             <View style={s.dayHead}>
               <T.H2 style={{ fontSize: 18 }} accessibilityRole="header">Day {i + 1}</T.H2>
             </View>
-            {stops.map((st, k) => (
-              <View key={k} style={s.slot}>
-                <View style={s.rail}>
-                  <View style={s.dotIcon}><Icon name={SLOT[st.slot].icon} size={16} color={C.accentText} /></View>
-                  {k < stops.length - 1 && <View style={s.line} />}
-                </View>
-                <View style={{ flex: 1, paddingBottom: 14 }}>
-                  <T.Label style={{ fontSize: 10, letterSpacing: 0.8, marginBottom: 2 }}>{SLOT[st.slot].label}</T.Label>
-                  <T.Body style={{ fontSize: 15, lineHeight: 21 }}>{st.t}</T.Body>
-                  {st.tags.some((x) => interests.includes(x)) && (
-                    <View style={{ flexDirection: 'row', gap: 6, marginTop: 6 }}>
-                      {st.tags.filter((x) => interests.includes(x)).map((x) => (
-                        <View key={x} style={s.tag}><T.Body style={s.tagText}>{x}</T.Body></View>
-                      ))}
+            {stops.map((st, k) => {
+              const mine = st.t !== suggested[i][k].t, free = st.t === FREE.t;
+              return (
+                <Pressable key={k} onPress={() => setEditing({ day: i, k })} style={({ pressed }) => [s.slot, pressed && s.slotPressed]}
+                  accessibilityRole="button" accessibilityLabel={`Day ${i + 1}, ${SLOT[st.slot].label}: ${st.t}.`} accessibilityHint="Change this stop">
+                  <View style={s.rail}>
+                    <View style={s.dotIcon}><Icon name={SLOT[st.slot].icon} size={16} color={C.accentText} /></View>
+                    {k < stops.length - 1 && <View style={s.line} />}
+                  </View>
+                  <View style={{ flex: 1, paddingBottom: 14 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: 2 }}>
+                      <T.Label style={{ fontSize: 10, letterSpacing: 0.8 }}>{SLOT[st.slot].label}</T.Label>
+                      {mine && <View style={s.mine}><T.Body style={s.mineText}>Your pick</T.Body></View>}
                     </View>
-                  )}
-                </View>
-              </View>
-            ))}
+                    <T.Body style={{ fontSize: 15, lineHeight: 21, color: free ? C.textMuted : C.text }}>{st.t}</T.Body>
+                    {st.tags.some((x) => interests.includes(x)) && (
+                      <View style={{ flexDirection: 'row', gap: 6, marginTop: 6 }}>
+                        {st.tags.filter((x) => interests.includes(x)).map((x) => (
+                          <View key={x} style={s.tag}><T.Body style={s.tagText}>{x}</T.Body></View>
+                        ))}
+                      </View>
+                    )}
+                  </View>
+                  <View style={s.editBtn}><Icon name="swap" size={18} color={C.textMuted} /></View>
+                </Pressable>
+              );
+            })}
             <View style={s.tip}><Icon name="leaf" size={16} color={C.success} /><T.Body style={{ flex: 1, fontSize: 13, lineHeight: 18, color: C.success }}>{TIPS[i % TIPS.length]}</T.Body></View>
           </Animated.View>
         ))}
 
         <T.Muted style={{ fontSize: 12, marginTop: 4 }}>Assembled from a curated activity list for your interests. Pressure scores are illustrative demo values.</T.Muted>
       </ScrollView>
+
+      <StopPicker open={!!editing} onClose={() => setEditing(null)} onPick={pick}
+        title={editing && cur ? `Day ${editing.day + 1} · ${SLOT[cur.slot].label}` : ''}
+        current={cur} dest={d} interests={interests} placed={placed} />
 
       <BottomBar>
         {saved ? (
@@ -134,7 +179,13 @@ const s = StyleSheet.create({
   lengthRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginTop: 24, marginBottom: 16 },
   day: { borderWidth: 1, borderColor: C.border, borderRadius: 22, padding: 16, marginBottom: 12 },
   dayHead: { marginBottom: 12 },
-  slot: { flexDirection: 'row', gap: 12 },
+  slot: { flexDirection: 'row', gap: 12, marginHorizontal: -8, paddingHorizontal: 8, paddingTop: 4, borderRadius: 14 },
+  slotPressed: { backgroundColor: C.surface2 },
+  editBtn: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center', backgroundColor: C.surface2 },
+  editHint: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 },
+  reset: { minHeight: 32, justifyContent: 'center' },
+  mine: { paddingHorizontal: 6, paddingVertical: 1, borderRadius: 6, backgroundColor: C.infoBg },
+  mineText: { fontSize: 10, fontFamily: F.bold, color: C.info },
   rail: { alignItems: 'center', width: 32 },
   dotIcon: { width: 32, height: 32, borderRadius: 99, backgroundColor: C.accent50, alignItems: 'center', justifyContent: 'center' },
   line: { flex: 1, width: 2, backgroundColor: C.accent100, marginVertical: 2 },

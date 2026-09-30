@@ -81,6 +81,16 @@ export function buildItinerary(dest: Destination, days: number, interests: strin
   return out;
 }
 
+export const FREE: Omit<Stop, 'slot'> = { t: 'Free time — explore at your own pace', tags: [] };
+
+// Traveler edits sit on top of the suggested plan, keyed "day-slotIndex",
+// so they survive leaving the screen, changing trip length and saving.
+export type Edits = Record<string, Stop>;
+export const tripKey = (id: string, from: string) => `${id}<${from}`;
+export function planWithEdits(dest: Destination, days: number, interests: string[], edits: Edits = {}): Stop[][] {
+  return buildItinerary(dest, days, interests).map((stops, i) => stops.map((st, k) => edits[`${i}-${k}`] ?? st));
+}
+
 export const dest = (id: string | undefined) => (id && DESTINATIONS[id]) || DESTINATIONS.boracay;
 
 // ── app state (in memory — no accounts in the MVP) ────────────────────────
@@ -91,6 +101,8 @@ type Ctx = {
   days: number; setDays: (n: number) => void;
   trips: SavedTrip[]; saveTrip: (t: SavedTrip) => void;
   isSaved: (id: string, from: string) => boolean;
+  edits: Record<string, Edits>;
+  setEdits: (key: string, e: Edits) => void;
 };
 
 const TripCtx = createContext<Ctx | null>(null);
@@ -100,12 +112,14 @@ export function TripProvider({ children }: { children: ReactNode }) {
   const [interests, setInterests] = useState<string[]>(['beach', 'food', 'snorkeling']);
   const [days, setDays] = useState(3);
   const [trips, setTrips] = useState<SavedTrip[]>([]);
+  const [edits, setAllEdits] = useState<Record<string, Edits>>({});
+  const setEdits = (key: string, e: Edits) => setAllEdits((x) => ({ ...x, [key]: e }));
   const toggleInterest = (id: string) =>
     setInterests((xs) => (xs.includes(id) ? xs.filter((x) => x !== id) : [...xs, id]));
   const saveTrip = (t: SavedTrip) => setTrips((xs) => [t, ...xs.filter((x) => x.id !== t.id)]);
   const isSaved = (id: string, from: string) => trips.some((t) => t.id === id && t.from === from);
   return (
-    <TripCtx.Provider value={{ name, setName, interests, toggleInterest, days, setDays, trips, saveTrip, isSaved }}>
+    <TripCtx.Provider value={{ name, setName, interests, toggleInterest, days, setDays, trips, saveTrip, isSaved, edits, setEdits }}>
       {children}
     </TripCtx.Provider>
   );
