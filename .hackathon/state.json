@@ -1,9 +1,9 @@
 {
   "name": "voyagreen",
-  "phase": "spec",
+  "phase": "build",
   "startedAt": 1790741666869,
   "hours": 4,
   "deadline": "16:00",
   "skips": [],
-  "updatedAt": 1790741705821
+  "updatedAt": 1790742063229
 }

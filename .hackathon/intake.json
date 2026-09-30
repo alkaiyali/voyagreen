@@ -2,7 +2,11 @@
  "idea": "VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure, suggests a lower-pressure alternative with a similar vibe when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
  "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
  "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
- "demo": "1. Pick Boracay, set 3 days and interests (beach, food, snorkeling); 2. VoyaGreen shows Boracay's tourism-pressure score (High) with the indicators behind it and suggests a lower-pressure alternative with the same vibe; 3. Tap the alternative and get a 3-day itinerary built around those interests, with a side-by-side pressure comparison.",
+ "demo": [
+  "Pick Boracay, set 3 days and interests: beach, food, snorkeling",
+  "See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe",
+  "Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison"
+ ],
  "domainObject": "a leaf-shaped map pin",
  "stack": "single-file static HTML (recommended)",
  "hours": "4 hours",

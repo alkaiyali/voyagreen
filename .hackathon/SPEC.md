@@ -8,20 +8,28 @@ The pressure check and swap: pick a destination, see its tourism-pressure score 
 This is the one thing that must work live.
 
 ## Demo path
-1. Open the app with the the pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary. flow ready
-2. The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.
-3. See the result on screen, live
+1. Pick Boracay, set 3 days and interests: beach, food, snorkeling
+2. See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe (Carabao Island, Romblon)
+3. Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison
+
+## Domain model
+- **Destination**: name, province, vibe tags (beach, island, mountain, food, diving, surf, heritage), pressure score 0–100, level (Low / Moderate / High), indicators, alternative id.
+- **Indicators** (seeded, illustrative — labelled "demo data" in the UI): visitor density, carrying-capacity use, environmental strain (reef / water / waste), peak-season crowding.
+- **Itinerary**: days × (morning / afternoon / evening) slots filled from a curated activity list per destination, filtered by the traveler's interests.
+- Seeded destinations: Boracay → Carabao Island · El Nido → Port Barton · Siargao → Bucas Grande · Baguio → Atok · Panglao → Anda.
 
 ## Stack
-Single-file static HTML + vanilla JS (fastest to demo). Add a backend only if the wow moment needs it.
+Single-file static HTML + vanilla JS in `present/app/` (index.html + app.js + palette.css). No backend, no build step, no network calls. Mobile-first: a 390px phone frame centered on desktop.
 
 ## Design
-- **Domain object**: a leaf-shaped map pin — the same object, repeated at different crops, scales and angles across the UI and the deck. One object reads as identity; a family reads as stock.
-- **One accent colour**, emphasis only — never a blue→purple gradient.
-- **Type**: Lane A (default) **Satoshi** + **Azeret Mono** · Lane B (dense/technical) **IBM Plex Sans** + **IBM Plex Mono**. Never Inter, Roboto, JetBrains Mono or a bare system font.
-- **Icons**: inline SVG, never a downloaded default pack (Lucide, Heroicons, Feather, Font Awesome, Material, Bootstrap, Phosphor, Tabler). Lane A: **Mynaui** (MIT) · Lane B: **Fluent** (MIT, regular + filled for active states).
+- **Domain object**: a leaf-shaped map pin — app icon, destination markers, empty state, the deck hero.
+- **Accent**: deep teal (sea + leaf), emphasis only. Pressure levels use status tokens: High → `--danger`, Moderate → `--warning`, Low → `--success`, always with a text label.
+- **Type**: Lane A — Satoshi + Azeret Mono. Inline SVG icons only.
 
 ## Cut list (non-goals)
-- Auth, accounts, persistence
-- Deployment polish
-- Tests beyond the demo path
+- Live tourism / environmental data feeds (scores are seeded)
+- AI-generated itineraries (itineraries are assembled from a curated activity list)
+- Booking, payments, accounts, saved trips
+- Real maps / geolocation
+- Crowd rotation between alternatives
+- Destinations outside the five seeded ones

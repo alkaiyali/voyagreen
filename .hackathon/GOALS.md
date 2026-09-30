@@ -1,13 +1,13 @@
 # Goals — voyagreen
 
-**Current goal: 2/7 · spec — Write the spec** (owner: all three).
+**Current goal: 3/7 · build — Build the demo path** (owner: driver).
 
 Success looks like:
-- [ ] pitch, core feature, demo path, stack, and cut list decided in SPEC.md
-- [ ] demo path has 3 concrete ordered steps
-- [ ] no unfilled placeholders
+- [ ] app entry point present (single index.html is enough)
+- [ ] app starts and serves real content (>300 bytes, not an empty shell)
+- [ ] no template tokens in the served page
 
-Verify with `node harness.mjs check spec`, advance with `node harness.mjs done`.
+Verify with `node harness.mjs check build`, advance with `node harness.mjs done`.
 
 ## All goals
 
@@ -16,11 +16,11 @@ Verify with `node harness.mjs check spec`, advance with `node harness.mjs done`.
   - [x] HACKATHON.md exists with a 40+ character idea
   - [x] one core feature named
   - [x] no unfilled placeholders
-- [ ] **2 · spec — Write the spec** · all three ← current
-  - [ ] pitch, core feature, demo path, stack, and cut list decided in SPEC.md
-  - [ ] demo path has 3 concrete ordered steps
-  - [ ] no unfilled placeholders
-- [ ] **3 · build — Build the demo path** · driver
+- [x] **2 · spec — Write the spec** · all three (done 12:21)
+  - [x] pitch, core feature, demo path, stack, and cut list decided in SPEC.md
+  - [x] demo path has 3 concrete ordered steps
+  - [x] no unfilled placeholders
+- [ ] **3 · build — Build the demo path** · driver ← current
   - [ ] app entry point present (single index.html is enough)
   - [ ] app starts and serves real content (>300 bytes, not an empty shell)
   - [ ] no template tokens in the served page
@@ -50,4 +50,4 @@ Verify with `node harness.mjs check spec`, advance with `node harness.mjs done`.
   - [ ] cold restart passes — the app survives being killed and restarted
   - [ ] deck and script gates still green after last-minute edits
 
-_Regenerated 2026-09-30T04:15:05.831Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
+_Regenerated 2026-09-30T04:21:03.241Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._

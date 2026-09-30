@@ -1,14 +1,14 @@
 {
-  "at": 1790741699334,
+  "at": 1790741717466,
   "idea": "VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure, suggests a lower-pressure alternative with a similar vibe when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
   "demo": [
-    "Open the app with the the pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary. flow ready",
-    "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
-    "See the result on screen, live"
+    "Pick Boracay, set 3 days and interests: beach, food, snorkeling",
+    "See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe",
+    "Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison"
   ],
-  "demoProposed": true,
+  "demoProposed": false,
   "domainObject": "a leaf-shaped map pin",
   "pain": "Every traveler gets sent to the same handful of famous spots, so those places get overcrowded and strained while the traveler never sees how much pressure their choice adds.",
   "painPoints": [
