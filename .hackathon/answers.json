@@ -1,12 +1,12 @@
 {
-  "at": 1790743638273,
+  "at": 1790751832328,
   "idea": "VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip. It scores a destination's tourism pressure from environmental and crowding indicators, suggests a greener alternative when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
   "demo": [
-    "Open VoyaGreen: quick onboarding, then pick beach, food and snorkeling for a 3-day trip",
-    "Tap Boracay: its tourism-pressure score is High (87), with the indicators behind it and a greener pick with the same vibe, Carabao Island",
-    "Tap Carabao Island: a 3-day itinerary built on those interests, 58 points lower pressure, saved to My trips"
+    "Get started, and setup already has beach, food, snorkeling and 3 days picked; tap Continue",
+    "On Plan, pick Boracay and tap Check Boracay: 87 out of 100, High pressure, packed past what it can absorb, and Carabao Island first among the greener options, 67% less pressure",
+    "Tap Go with Carabao Island: a 3-day itinerary 58 points lower in pressure; Save this trip"
   ],
   "demoProposed": false,
   "domainObject": "a leaf-shaped map pin",
@@ -26,7 +26,7 @@
   "qa": [
     {
       "q": "Where does the pressure score come from?",
-      "a": "In this demo the scores are seeded and illustrative, and the app labels them demo data. Each one combines visitor density, carrying-capacity use, environmental strain and peak-season crowding. The real version would pull those indicators from public tourism-arrival and environmental data."
+      "a": "The pressure scores are seeded and illustrative, and the app labels them demo data. Each one combines visitor density, carrying-capacity use, environmental strain and peak-season crowding. Next to it, an estimated occupancy for today moves with real open signals: Wikipedia pageviews, Philippine holidays, the weather forecast and air quality. The app labels that an estimate."
     },
     {
       "q": "Is the itinerary AI-generated?",
@@ -34,7 +34,7 @@
     },
     {
       "q": "What doesn't work yet?",
-      "a": "There are only five seeded Philippine destinations, the scores are illustrative rather than measured, and there's no live data feed, no booking, no accounts and no real map. Those are next."
+      "a": "The pressure scores are illustrative, not measured, and there's no official tourism-arrival feed behind them yet. The occupancy estimate uses open proxies, not real headcounts. There's no booking, no accounts and no real map. Those are next."
     },
     {
       "q": "Won't this just move the crowd to the alternative?",

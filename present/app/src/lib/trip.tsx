@@ -15,6 +15,45 @@ export function level(n: number): { label: string; short: string; tone: Tone } {
   return { label: 'Low pressure', short: 'Low', tone: 'success' };
 }
 
+// The indicator that pushes the score up the most — the one-line "why".
+export function topFactor(d: Destination) {
+  const i = [...INDICATORS].sort((a, b) => d.indicators[b.id as IndicatorId] - d.indicators[a.id as IndicatorId])[0];
+  return { label: i.label, value: d.indicators[i.id as IndicatorId] };
+}
+
+// Plain-language phrase for an indicator when it runs high — the verdict line.
+const HIGH_PHRASE: Record<IndicatorId, string> = {
+  density: 'packed with visitors',
+  capacity: 'past what it can absorb',
+  environment: 'reef, water and waste under strain',
+  peak: 'crowds bunched into peak season',
+};
+
+export function verdict(d: Destination) {
+  const sc = score(d), lv = level(sc);
+  if (lv.tone === 'success') return 'Few visitors for its size — your trip adds little strain.';
+  const top = [...INDICATORS].sort((a, b) => d.indicators[b.id as IndicatorId] - d.indicators[a.id as IndicatorId]).slice(0, 2);
+  const txt = top.map((i) => HIGH_PHRASE[i.id as IndicatorId]).join(', ');
+  return txt[0].toUpperCase() + txt.slice(1) + '.';
+}
+
+// Greener places with the same vibe: low pressure, shares ≥2 vibes with the
+// original, the seeded pairing first, then by fit with the traveler, then score.
+export function alternatives(fromId: string, interests: string[], n = 3) {
+  const from = DESTINATIONS[fromId];
+  if (!from || score(from) < 45) return [];
+  const fit = (id: string) => {
+    const d = DESTINATIONS[id];
+    const shared = d.vibe.filter((v) => from.vibe.includes(v)).length;
+    const liked = interests.filter((x) => d.vibe.includes(x) || d.activities.some((a) => a.tags.includes(x))).length;
+    return { shared, rank: (id === from.alt ? 100 : 0) + shared * 2 + liked * 3 - score(d) / 20 };
+  };
+  return Object.keys(DESTINATIONS)
+    .filter((id) => id !== fromId && score(DESTINATIONS[id]) < 45 && fit(id).shared >= 2)
+    .sort((a, b) => fit(b).rank - fit(a).rank)
+    .slice(0, n);
+}
+
 export function matchPct(dest: Destination, interests: string[], fallback: string[]) {
   const want = interests.length ? interests : fallback;
   const hit = want.filter((w) => dest.vibe.includes(w) || dest.activities.some((a) => a.tags.includes(w))).length;
@@ -51,6 +90,7 @@ type Ctx = {
   interests: string[]; toggleInterest: (id: string) => void;
   days: number; setDays: (n: number) => void;
   trips: SavedTrip[]; saveTrip: (t: SavedTrip) => void;
+  isSaved: (id: string, from: string) => boolean;
 };
 
 const TripCtx = createContext<Ctx | null>(null);
@@ -63,8 +103,9 @@ export function TripProvider({ children }: { children: ReactNode }) {
   const toggleInterest = (id: string) =>
     setInterests((xs) => (xs.includes(id) ? xs.filter((x) => x !== id) : [...xs, id]));
   const saveTrip = (t: SavedTrip) => setTrips((xs) => [t, ...xs.filter((x) => x.id !== t.id)]);
+  const isSaved = (id: string, from: string) => trips.some((t) => t.id === id && t.from === from);
   return (
-    <TripCtx.Provider value={{ name, setName, interests, toggleInterest, days, setDays, trips, saveTrip }}>
+    <TripCtx.Provider value={{ name, setName, interests, toggleInterest, days, setDays, trips, saveTrip, isSaved }}>
       {children}
     </TripCtx.Provider>
   );

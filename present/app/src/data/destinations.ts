@@ -3,12 +3,20 @@ export type Activity = { t: string; tags: string[]; slot: Slot };
 export type Destination = {
   name: string; province: string; vibe: string[]; blurb: string;
   indicators: Record<'density' | 'capacity' | 'environment' | 'peak', number>;
-  alt?: string; activities: Activity[];
+  alt?: string;
+  /** approximate centre — used for the live weather / air signals */
+  geo: { lat: number; lon: number };
+  /** en.wikipedia article — used for the live search-interest signal */
+  wiki: string;
+  /** curated Wikimedia Commons photo + a search fallback */
+  photo: { file?: string; query: string };
+  activities: Activity[];
 };
 
 // Seeded demo data. Pressure indicators are ILLUSTRATIVE, not measured —
 // the UI labels them "demo data". Activities are a curated sample list.
 // Indicator scale: 0 (no pressure) – 100 (severe pressure).
+// 10 famous places, each paired with a greener alternative of the same vibe.
 
 export const INTERESTS = [
   { id: 'beach', label: 'Beach' },
@@ -34,6 +42,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     blurb: 'White Beach, sunsets, the country’s most famous island',
     indicators: { density: 92, capacity: 88, environment: 81, peak: 84 },
     alt: 'carabao',
+    geo: { lat: 11.9689, lon: 121.9239 },
+    wiki: 'Boracay',
+    photo: { file: 'File:Boracay White Beach in day (985286231).jpg', query: 'Boracay White Beach' },
     activities: [
       { t: 'Swim and sunbathe at White Beach Station 2', tags: ['beach'], slot: 'am' },
       { t: 'Island-hopping snorkel trip to Crystal Cove', tags: ['snorkeling', 'beach'], slot: 'am' },
@@ -48,6 +59,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     name: 'Carabao Island', province: 'San Jose, Romblon', vibe: ['beach', 'snorkeling', 'food', 'nature'],
     blurb: 'Boracay’s quiet neighbour to the north — same white sand, a fraction of the crowd',
     indicators: { density: 24, capacity: 31, environment: 28, peak: 35 },
+    geo: { lat: 12.0667, lon: 121.9333 },
+    wiki: 'Romblon',
+    photo: { file: 'File:Hambil island.jpg', query: 'Carabao Island Romblon beach' },
     activities: [
       { t: 'Morning swim at Lanas Beach — powdery sand, almost empty', tags: ['beach'], slot: 'am' },
       { t: 'Snorkel the reef off the west coast with a local boatman', tags: ['snorkeling', 'nature'], slot: 'am' },
@@ -65,6 +79,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     blurb: 'Limestone lagoons and the famous Tours A–D',
     indicators: { density: 84, capacity: 86, environment: 79, peak: 80 },
     alt: 'portbarton',
+    geo: { lat: 11.18, lon: 119.39 },
+    wiki: 'El Nido, Palawan',
+    photo: { file: 'File:Limestone island in Bacuit Bay, El Nido, Palawan, Philippines.jpg', query: 'El Nido Palawan lagoon limestone' },
     activities: [
       { t: 'Tour A: Big Lagoon and Secret Lagoon', tags: ['snorkeling', 'nature'], slot: 'am' },
       { t: 'Lunch at Las Cabañas beach', tags: ['food', 'beach'], slot: 'pm' },
@@ -77,6 +94,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     name: 'Port Barton', province: 'San Vicente, Palawan', vibe: ['beach', 'snorkeling', 'nature', 'food'],
     blurb: 'Laid-back bay village with turtles, reefs and empty islands',
     indicators: { density: 33, capacity: 36, environment: 30, peak: 42 },
+    geo: { lat: 10.4667, lon: 119.2 },
+    wiki: 'San Vicente, Palawan',
+    photo: { file: 'File:German Island, Port Barton, Philippines (36292026673).jpg', query: 'Port Barton San Vicente Palawan' },
     activities: [
       { t: 'Island-hop to German Island and Twin Reef', tags: ['snorkeling', 'beach'], slot: 'am' },
       { t: 'Swim with sea turtles at Turtle Spot', tags: ['snorkeling', 'nature'], slot: 'am' },
@@ -92,6 +112,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     blurb: 'Cloud 9 and the surf capital’s party strip',
     indicators: { density: 78, capacity: 82, environment: 70, peak: 76 },
     alt: 'bucasgrande',
+    geo: { lat: 9.8, lon: 126.15 },
+    wiki: 'Siargao',
+    photo: { file: 'File:Picturesque Guyam Island, Siargao.jpg', query: 'Siargao island beach' },
     activities: [
       { t: 'Surf lesson at Cloud 9', tags: ['surfing', 'beach'], slot: 'am' },
       { t: 'Magpupungko rock pools', tags: ['nature', 'beach'], slot: 'pm' },
@@ -103,6 +126,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     name: 'Bucas Grande', province: 'Socorro, Surigao del Norte', vibe: ['nature', 'snorkeling', 'beach', 'culture'],
     blurb: 'Sohoton Cove’s hidden lagoons, jellyfish sanctuary and stilt villages',
     indicators: { density: 22, capacity: 34, environment: 29, peak: 38 },
+    geo: { lat: 9.67, lon: 125.95 },
+    wiki: 'Bucas Grande',
+    photo: { file: 'File:Middle Bucas Grande in Dapa, Siargao.jpg', query: 'Sohoton Cove Bucas Grande lagoon' },
     activities: [
       { t: 'Paddle into Sohoton Cove at low tide', tags: ['nature'], slot: 'am' },
       { t: 'Swim in the stingless-jellyfish lagoon', tags: ['nature', 'snorkeling'], slot: 'am' },
@@ -117,6 +143,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     blurb: 'Cool weather, strawberries and Session Road',
     indicators: { density: 80, capacity: 85, environment: 74, peak: 88 },
     alt: 'atok',
+    geo: { lat: 16.4119, lon: 120.5933 },
+    wiki: 'Baguio',
+    photo: { file: 'File:Burnham Park view from city hall (Baguio City; 02-25-2024).jpg', query: 'Baguio city Burnham Park' },
     activities: [
       { t: 'Burnham Park and the market', tags: ['culture', 'food'], slot: 'am' },
       { t: 'Strawberry farm in La Trinidad', tags: ['food', 'nature'], slot: 'am' },
@@ -128,6 +157,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     name: 'Atok', province: 'Benguet', vibe: ['hiking', 'nature', 'food', 'culture'],
     blurb: 'Highland flower farms and sea-of-clouds ridges above the crowds',
     indicators: { density: 18, capacity: 27, environment: 32, peak: 45 },
+    geo: { lat: 16.6272, lon: 120.7672 },
+    wiki: 'Atok, Benguet',
+    photo: { file: 'File:Atok, Benguet 9-8-2013.jpg', query: 'Atok Benguet flower farm' },
     activities: [
       { t: 'Sunrise sea of clouds from the Northern Blossom ridge', tags: ['nature', 'hiking'], slot: 'am' },
       { t: 'Walk the flower and vegetable terraces', tags: ['nature', 'culture'], slot: 'am' },
@@ -142,6 +174,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     blurb: 'Alona Beach resorts and Balicasag dive trips',
     indicators: { density: 68, capacity: 64, environment: 62, peak: 66 },
     alt: 'anda',
+    geo: { lat: 9.585, lon: 123.75 },
+    wiki: 'Panglao, Bohol',
+    photo: { file: 'File:Panglao coast, Alona Beach from air (Panglao, Bohol; 01-09-2023).jpg', query: 'Panglao Bohol Alona beach' },
     activities: [
       { t: 'Dolphin watch and snorkel at Balicasag', tags: ['snorkeling', 'nature'], slot: 'am' },
       { t: 'Alona Beach afternoon', tags: ['beach'], slot: 'pm' },
@@ -152,6 +187,9 @@ export const DESTINATIONS: Record<string, Destination> = {
     name: 'Anda', province: 'Bohol', vibe: ['beach', 'snorkeling', 'nature', 'culture'],
     blurb: 'Bohol’s quiet east coast — white sand, cave pools, no strip',
     indicators: { density: 26, capacity: 30, environment: 27, peak: 36 },
+    geo: { lat: 9.744, lon: 124.576 },
+    wiki: 'Anda, Bohol',
+    photo: { file: 'File:Andabeach.jpg', query: 'Anda Bohol Quinale beach' },
     activities: [
       { t: 'Swim at Quinale Beach at sunrise', tags: ['beach'], slot: 'am' },
       { t: 'Snorkel the house reef with a community-run guide', tags: ['snorkeling', 'nature'], slot: 'am' },
@@ -161,10 +199,181 @@ export const DESTINATIONS: Record<string, Destination> = {
       { t: 'Beach walk under the stars', tags: ['beach', 'nature'], slot: 'eve' },
     ],
   },
+  coron: {
+    name: 'Coron', province: 'Palawan', vibe: ['beach', 'snorkeling', 'nature', 'culture'],
+    blurb: 'Kayangan Lake, wreck dives and the Calamian karst',
+    indicators: { density: 85, capacity: 83, environment: 76, peak: 80 },
+    alt: 'linapacan',
+    geo: { lat: 12.0, lon: 120.2 },
+    wiki: 'Coron, Palawan',
+    photo: { file: 'File:Kayangan Lake (Coron, Palawan; 03-17-2024).jpg', query: 'Coron Palawan Kayangan Lake' },
+    activities: [
+      { t: 'Climb to Kayangan Lake at sunrise, before the boats', tags: ['nature', 'beach'], slot: 'am' },
+      { t: 'Paddle the Twin Lagoon with a local bangka crew', tags: ['nature', 'snorkeling'], slot: 'am' },
+      { t: 'Island-hop to Malcapuya and Banana Island', tags: ['beach', 'snorkeling'], slot: 'am' },
+      { t: 'Snorkel the Skeleton Wreck and Coral Garden', tags: ['snorkeling', 'nature'], slot: 'pm' },
+      { t: 'Lunch of grilled lapu-lapu at a Calamian kitchen', tags: ['food'], slot: 'pm' },
+      { t: 'Walk the town market for cashew and dried fish', tags: ['culture', 'food'], slot: 'pm' },
+      { t: 'Sunset from the Mt. Tapyas viewing deck', tags: ['hiking', 'nature'], slot: 'eve' },
+      { t: 'Maquinit hot springs under the stars', tags: ['nature'], slot: 'eve' },
+    ],
+  },
+  linapacan: {
+    name: 'Linapacan', province: 'Palawan', vibe: ['beach', 'snorkeling', 'nature', 'food'],
+    blurb: 'Turquoise straits and empty beaches — what El Nido was before the crowds',
+    indicators: { density: 15, capacity: 22, environment: 24, peak: 30 },
+    geo: { lat: 11.5, lon: 119.9 },
+    wiki: 'Linapacan',
+    photo: { file: 'File:Dicabaito Island Calamian Group - panoramio.jpg', query: 'Linapacan Palawan island' },
+    activities: [
+      { t: 'Island-hop the Linapacan Strait with a local boatman', tags: ['beach', 'snorkeling'], slot: 'am' },
+      { t: 'Snorkel coral gardens with nobody else in sight', tags: ['snorkeling', 'nature'], slot: 'am' },
+      { t: 'Beach picnic of grilled fish with the boat crew', tags: ['food', 'beach'], slot: 'pm' },
+      { t: 'Paddle into a hidden lagoon at low tide', tags: ['nature'], slot: 'pm' },
+      { t: 'Walk the shore of a fishing barangay at golden hour', tags: ['culture', 'beach'], slot: 'eve' },
+      { t: 'Stargazing from the deck of a homestay', tags: ['nature'], slot: 'eve' },
+    ],
+  },
+  vigan: {
+    name: 'Vigan', province: 'Ilocos Sur', vibe: ['culture', 'food', 'nightlife', 'nature'],
+    blurb: 'Cobblestone streets, kalesa rides and a 16th-century town core',
+    indicators: { density: 62, capacity: 64, environment: 54, peak: 68 },
+    alt: 'paoay',
+    geo: { lat: 17.5747, lon: 120.3869 },
+    wiki: 'Vigan',
+    photo: { file: 'File:Spanish Cultural Heritage in Vigan City.jpg', query: 'Calle Crisologo Vigan' },
+    activities: [
+      { t: 'Walk Calle Crisologo before the shops open', tags: ['culture'], slot: 'am' },
+      { t: 'Kalesa ride through the heritage houses', tags: ['culture'], slot: 'am' },
+      { t: 'Pottery session at the Pagburnayan jar workshop', tags: ['culture'], slot: 'pm' },
+      { t: 'Eat Vigan empanada and longganisa at Plaza Salcedo', tags: ['food'], slot: 'pm' },
+      { t: 'Climb Bantay Bell Tower for the view', tags: ['culture', 'nature'], slot: 'pm' },
+      { t: 'Bibingka and tsokolate at a heritage café', tags: ['food'], slot: 'eve' },
+      { t: 'Plaza fountain show and street food at night', tags: ['nightlife', 'culture'], slot: 'eve' },
+    ],
+  },
+  paoay: {
+    name: 'Paoay', province: 'Ilocos Norte', vibe: ['culture', 'food', 'nature', 'hiking'],
+    blurb: 'Baroque church, giant sand dunes and a quiet Ilocos weekend',
+    indicators: { density: 28, capacity: 32, environment: 26, peak: 40 },
+    geo: { lat: 18.0617, lon: 120.5175 },
+    wiki: 'Paoay',
+    photo: { file: 'File:Paoay Church Ilocos Norte Philippines.jpg', query: 'Paoay Church Ilocos' },
+    activities: [
+      { t: 'Paoay Church at first light — a UNESCO baroque landmark', tags: ['culture'], slot: 'am' },
+      { t: '4x4 and sandboarding on the Paoay dunes', tags: ['nature', 'hiking'], slot: 'am' },
+      { t: 'Lunch of Ilocos bagnet and pinakbet', tags: ['food'], slot: 'pm' },
+      { t: 'Bicycle around Paoay Lake', tags: ['nature'], slot: 'pm' },
+      { t: 'Malacañang of the North and its gardens', tags: ['culture'], slot: 'pm' },
+      { t: 'Sunset from the dunes with an empanada snack', tags: ['nature', 'food'], slot: 'eve' },
+    ],
+  },
+  banaue: {
+    name: 'Banaue', province: 'Ifugao', vibe: ['hiking', 'culture', 'nature', 'food'],
+    blurb: 'Two thousand years of rice terraces carved into the cordillera',
+    indicators: { density: 70, capacity: 68, environment: 58, peak: 72 },
+    alt: 'batad',
+    geo: { lat: 16.9167, lon: 121.05 },
+    wiki: 'Banaue Rice Terraces',
+    photo: { file: 'File:Banaue Philippines Banaue-Rice-Terraces-01.jpg', query: 'Banaue Rice Terraces' },
+    activities: [
+      { t: 'Banaue Viewpoint at sunrise over the terraces', tags: ['nature', 'hiking'], slot: 'am' },
+      { t: 'Trek the Hapao terraces and soak in the hot springs', tags: ['hiking', 'nature'], slot: 'am' },
+      { t: 'Walk to Pula village with an Ifugao guide', tags: ['culture', 'hiking'], slot: 'pm' },
+      { t: 'Weaving demonstration with a local weaver', tags: ['culture'], slot: 'pm' },
+      { t: 'Native chicken tinola and smoked meat dinner', tags: ['food', 'culture'], slot: 'eve' },
+      { t: 'Stargaze from a terrace-side homestay', tags: ['nature'], slot: 'eve' },
+    ],
+  },
+  batad: {
+    name: 'Batad', province: 'Ifugao', vibe: ['hiking', 'culture', 'nature', 'food'],
+    blurb: 'An amphitheater of terraces you can only reach on foot',
+    indicators: { density: 30, capacity: 34, environment: 30, peak: 42 },
+    geo: { lat: 16.9333, lon: 121.1333 },
+    wiki: 'Batad Rice Terraces',
+    photo: { file: 'File:Batad rice terraces in Ifugao.jpg', query: 'Batad rice terraces Ifugao' },
+    activities: [
+      { t: 'Descend to the Batad amphitheater viewpoint', tags: ['hiking', 'nature'], slot: 'am' },
+      { t: 'Trek to Tappiya Falls for a cold swim', tags: ['hiking', 'nature'], slot: 'am' },
+      { t: 'Lunch on a rice-terrace homestay porch', tags: ['food', 'culture'], slot: 'pm' },
+      { t: 'Walk the ridge trail toward Bangaan village', tags: ['hiking', 'culture'], slot: 'pm' },
+      { t: 'Help plant or harvest in the terraces, season permitting', tags: ['culture', 'nature'], slot: 'pm' },
+      { t: 'Share a traditional Ifugao dinner with your host family', tags: ['food', 'culture'], slot: 'eve' },
+      { t: 'Sleep under mosquito nets in a wooden hut', tags: ['culture'], slot: 'eve' },
+    ],
+  },
+  camiguin: {
+    name: 'Camiguin', province: 'Camiguin', vibe: ['nature', 'beach', 'snorkeling', 'culture'],
+    blurb: 'Seven volcanoes, a sunken cemetery and cold springs',
+    indicators: { density: 52, capacity: 50, environment: 44, peak: 58 },
+    alt: 'mantigue',
+    geo: { lat: 9.25, lon: 124.7 },
+    wiki: 'Camiguin',
+    photo: { file: 'File:Timpoong and Hibok-Hibok Natural Monument in Camiguin - Allan Jay Quesada.jpg', query: 'Camiguin White Island sandbar' },
+    activities: [
+      { t: 'Swim to White Island sandbar at low tide', tags: ['beach', 'nature'], slot: 'am' },
+      { t: 'Katibawasan Falls and a cold dip', tags: ['nature'], slot: 'am' },
+      { t: 'Hike toward Hibok-Hibok crater with a guide', tags: ['hiking', 'nature'], slot: 'am' },
+      { t: 'Snorkel the coral reef off Mantigue Island', tags: ['snorkeling', 'nature'], slot: 'pm' },
+      { t: 'Walk the Stations of the Cross up Old Volcano', tags: ['hiking', 'culture'], slot: 'pm' },
+      { t: 'Lanzones and pastel bread at the Mambajao market', tags: ['food'], slot: 'pm' },
+      { t: 'Sunset at the Sunken Cemetery cross', tags: ['culture', 'nature'], slot: 'eve' },
+      { t: 'Soak in Ardent Hot Springs', tags: ['nature'], slot: 'eve' },
+    ],
+  },
+  mantigue: {
+    name: 'Mantigue Island', province: 'Camiguin', vibe: ['nature', 'beach', 'snorkeling', 'food'],
+    blurb: 'A small island with a coral sanctuary and a fishing village',
+    indicators: { density: 20, capacity: 26, environment: 24, peak: 32 },
+    geo: { lat: 9.19, lon: 124.73 },
+    wiki: 'Mantigue',
+    photo: { file: 'File:White Beach in Mantigue Island, Camiguin.jpg', query: 'Mantigue Island Camiguin' },
+    activities: [
+      { t: 'Snorkel the coral sanctuary with a village guide', tags: ['snorkeling', 'nature'], slot: 'am' },
+      { t: 'Walk the island’s forest trail and sandbar', tags: ['nature', 'beach'], slot: 'am' },
+      { t: 'Grilled catch-of-the-day picnic on the sand', tags: ['food', 'beach'], slot: 'pm' },
+      { t: 'Kayak around the island against the current', tags: ['nature'], slot: 'pm' },
+      { t: 'Hang out with the fishing families before the last boat', tags: ['culture'], slot: 'eve' },
+    ],
+  },
+  baler: {
+    name: 'Baler', province: 'Aurora', vibe: ['surfing', 'beach', 'nature', 'food'],
+    blurb: 'Cloud-break surf town with a jungle waterfall behind it',
+    indicators: { density: 60, capacity: 58, environment: 48, peak: 66 },
+    alt: 'dingalan',
+    geo: { lat: 15.7589, lon: 121.5603 },
+    wiki: 'Baler, Aurora',
+    photo: { file: 'File:Baler Sunrise.jpg', query: 'Baler Aurora surfing' },
+    activities: [
+      { t: 'Surf lesson at Sabang Beach with a local instructor', tags: ['surfing', 'beach'], slot: 'am' },
+      { t: 'Trek to Ditumabo Mother Falls', tags: ['hiking', 'nature'], slot: 'am' },
+      { t: 'Sunrise at Diguisit rock formations', tags: ['nature', 'beach'], slot: 'am' },
+      { t: 'Baler Museum and Quezon’s summer house', tags: ['culture'], slot: 'pm' },
+      { t: 'Pako salad and Baler suman at the town market', tags: ['food', 'culture'], slot: 'pm' },
+      { t: 'Sunset from Ermita Hill over the bay', tags: ['nature', 'beach'], slot: 'eve' },
+      { t: 'Beach bonfire and cold drinks with friends', tags: ['nightlife', 'beach'], slot: 'eve' },
+    ],
+  },
+  dingalan: {
+    name: 'Dingalan', province: 'Aurora', vibe: ['nature', 'beach', 'hiking', 'food'],
+    blurb: 'Cliffs that look like Batanes, with almost nobody on them',
+    indicators: { density: 24, capacity: 28, environment: 26, peak: 34 },
+    geo: { lat: 15.3833, lon: 121.4 },
+    wiki: 'Dingalan',
+    photo: { file: 'File:8857Paltic, Dingalan Aurora Proper 28.jpg', query: 'Dingalan Aurora coast' },
+    activities: [
+      { t: 'Sunrise from the Batanes-of-the-East viewpoint', tags: ['nature', 'hiking'], slot: 'am' },
+      { t: 'Trek down to White Beach cove', tags: ['hiking', 'beach'], slot: 'am' },
+      { t: 'Boat ride along the cliffs to the lagoons', tags: ['nature', 'beach'], slot: 'pm' },
+      { t: 'Swim in the blue lagoon at low tide', tags: ['beach', 'nature'], slot: 'pm' },
+      { t: 'Grilled fish lunch at the lighthouse canteen', tags: ['food'], slot: 'pm' },
+      { t: 'Camp at the cove and watch the stars', tags: ['nature'], slot: 'eve' },
+    ],
+  },
 };
 
 // Destinations a traveler can pick (the famous ones people default to).
-export const PICKS = ['boracay', 'elnido', 'siargao', 'baguio', 'panglao'];
+export const PICKS = ['boracay', 'elnido', 'siargao', 'baguio', 'panglao', 'coron', 'vigan', 'banaue', 'camiguin', 'baler'];
 
 export const TIPS = [
   'Bring a refillable bottle — most island resorts refill for free.',
@@ -172,4 +381,5 @@ export const TIPS = [
   'Use reef-safe sunscreen before you snorkel.',
   'Carry your trash back out — small islands can’t process it.',
   'Hire local guides and boatmen directly.',
+  'Avoid the long-weekend rush if you can — midweek is calmer and cheaper.',
 ];

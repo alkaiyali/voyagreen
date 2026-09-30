@@ -1,97 +1,104 @@
 import { useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { router } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { C, DemoBadge, F, Pill, T } from '@/components/ui';
-import { Icon, LeafPin } from '@/components/icons';
-import { DESTINATIONS, PICKS } from '@/data/destinations';
-import { level, score, useTrip } from '@/lib/trip';
+import { BottomBar, Button, C, DemoBadge, F, T } from '@/components/ui';
+import { Icon } from '@/components/icons';
+import { DestPhoto } from '@/components/photo';
+import { DESTINATIONS, INTERESTS, PICKS } from '@/data/destinations';
+import { useTrip } from '@/lib/trip';
 
-// Cover art is procedural (no stock photos): a ramp gradient + the pin.
-const COVERS: [string, string][] = [
-  [C.accent700, C.accent400], [C.accent800, C.accent500], [C.accent600, C.accent300], [C.accent900, C.accent600], [C.accent700, C.accent300],
-];
-
-export default function Explore() {
-  const { name, interests } = useTrip();
+// Demo step 1: the traveler says where they want to go. Scores stay hidden
+// here on purpose — the check on the next screen is the reveal.
+export default function Plan() {
+  const { name, interests, days } = useTrip();
   const [q, setQ] = useState('');
-  const picks = PICKS.filter((id) => {
-    const d = DESTINATIONS[id];
-    return !q || `${d.name} ${d.province}`.toLowerCase().includes(q.toLowerCase());
-  });
-  const greener = PICKS.map((id) => DESTINATIONS[id].alt!).filter((id) =>
-    !interests.length || DESTINATIONS[id].vibe.some((v) => interests.includes(v)));
+  const [sel, setSel] = useState<string | null>(null);
+  const query = q.trim().toLowerCase();
+  const list = query
+    ? Object.keys(DESTINATIONS).filter((id) => {
+      const d = DESTINATIONS[id];
+      return `${d.name} ${d.province} ${d.vibe.join(' ')}`.toLowerCase().includes(query);
+    })
+    : PICKS;
+  const liked = INTERESTS.filter((x) => interests.includes(x.id)).map((x) => x.label);
+  const chosen = sel ? DESTINATIONS[sel] : undefined;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: C.bg }} edges={['top']}>
-      <ScrollView contentContainerStyle={s.pad}>
+      <ScrollView contentContainerStyle={s.pad} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag">
         <View style={s.head}>
-          <View>
-            <T.Muted>Magandang araw,</T.Muted>
-            <T.H2 style={{ fontSize: 24 }}>{name || 'traveler'}</T.H2>
-          </View>
+          <T.Muted style={{ flex: 1 }}>Magandang araw{name ? `, ${name}` : ''}</T.Muted>
           <DemoBadge />
         </View>
+        <T.H1 style={{ marginTop: 6 }}>Where are you{'\n'}headed?</T.H1>
+
+        <Pressable onPress={() => router.push('/setup?edit=1')} style={({ pressed }) => [s.prefs, pressed && { opacity: 0.75 }]}
+          accessibilityRole="button" accessibilityLabel={`Trip: ${days} days, ${liked.join(', ') || 'no interests yet'}. Edit`}>
+          <Icon name="calendar" size={18} color={C.accentText} />
+          <T.Body style={{ flex: 1, fontSize: 14 }} numberOfLines={1}>
+            <T.Body style={{ fontFamily: F.bold, fontSize: 14 }}>{days} day{days > 1 ? 's' : ''}</T.Body> · {liked.join(', ') || 'Add your interests'}
+          </T.Body>
+          <T.Body style={{ fontFamily: F.bold, fontSize: 14, color: C.accentText }}>Edit</T.Body>
+        </Pressable>
 
         <View style={s.search}>
           <Icon name="search" size={18} color={C.textMuted} />
-          <TextInput value={q} onChangeText={setQ} placeholder="Where are you headed?" placeholderTextColor={C.textFaint} style={s.searchInput} />
+          <TextInput value={q} onChangeText={setQ} placeholder="Search a place, province or vibe" placeholderTextColor={C.textMuted} style={s.searchInput}
+            accessibilityLabel="Search destinations" returnKeyType="search" clearButtonMode="while-editing" autoCorrect={false} />
         </View>
 
-        <T.Label style={s.section}>Popular right now</T.Label>
-        {picks.map((id, k) => {
-          const d = DESTINATIONS[id];
-          return (
-            <Pressable key={id} onPress={() => router.push(`/destination/${id}`)} style={({ pressed }) => [s.row, pressed && { opacity: 0.9 }]}>
-              <LinearGradient colors={COVERS[k % COVERS.length]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={s.thumb}>
-                <LeafPin size={30} color={C.surface} leaf={COVERS[k % COVERS.length][0]} />
-              </LinearGradient>
-              <View style={{ flex: 1 }}>
-                <T.Body style={{ fontFamily: F.bold, fontSize: 17 }}>{d.name}</T.Body>
-                <T.Muted style={{ fontSize: 13 }}>{d.province}</T.Muted>
-                <T.Muted style={{ fontSize: 12, marginTop: 2 }} numberOfLines={1}>{d.vibe.slice(0, 3).join(' · ')}</T.Muted>
-              </View>
-              <View style={s.check}>
-                <T.Label style={{ fontSize: 9, color: C.accentText }}>Check</T.Label>
-                <Icon name="arrow" size={16} color={C.accentText} />
-              </View>
-            </Pressable>
-          );
-        })}
-
-        <T.Label style={s.section}>Greener picks for your vibe</T.Label>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12, paddingRight: 20 }}>
-          {greener.map((id, k) => {
-            const d = DESTINATIONS[id], lv = level(score(d));
+        <T.Label style={s.section}>{query ? `${list.length} result${list.length === 1 ? '' : 's'}` : 'Popular destinations'}</T.Label>
+        {list.length === 0 && (
+          <View style={s.none}>
+            <T.Body style={{ fontFamily: F.bold }}>No match for “{q}”</T.Body>
+            <T.Muted style={{ fontSize: 13 }}>We cover 20 places in the Philippines so far. Try Palawan, Bohol or “surf”.</T.Muted>
+          </View>
+        )}
+        <View style={{ gap: 10 }} accessibilityRole="radiogroup">
+          {list.map((id) => {
+            const d = DESTINATIONS[id], on = sel === id;
             return (
-              <Pressable key={id} onPress={() => router.push(`/destination/${id}`)} style={s.card}>
-                <LinearGradient colors={COVERS[(k + 2) % COVERS.length]} start={{ x: 0, y: 1 }} end={{ x: 1, y: 0 }} style={s.cardArt}>
-                  <LeafPin size={44} color={C.surface} leaf={COVERS[(k + 2) % COVERS.length][0]} />
-                </LinearGradient>
-                <View style={{ padding: 12, gap: 4 }}>
-                  <T.Body style={{ fontFamily: F.bold }} numberOfLines={1}>{d.name}</T.Body>
-                  <T.Muted style={{ fontSize: 12 }} numberOfLines={1}>{d.province}</T.Muted>
-                  <View style={{ flexDirection: 'row', marginTop: 4 }}><Pill t={lv.tone} label={lv.label} icon="check" /></View>
+              <Pressable key={id} onPress={() => setSel(on ? null : id)} style={({ pressed }) => [s.row, on && s.rowOn, pressed && { opacity: 0.8 }]}
+                accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={`${d.name}, ${d.province}`}>
+                <DestPhoto id={id} style={s.thumb} pinSize={22} />
+                <View style={{ flex: 1 }}>
+                  <T.Body style={{ fontFamily: F.bold, fontSize: 17 }}>{d.name}</T.Body>
+                  <T.Muted style={{ fontSize: 13 }} numberOfLines={1}>{d.province}</T.Muted>
+                  <T.Muted style={{ fontSize: 12, textTransform: 'capitalize' }} numberOfLines={1}>{d.vibe.slice(0, 3).join(' · ')}</T.Muted>
                 </View>
+                <View style={[s.radio, on && s.radioOn]}>{on && <Icon name="check" size={14} color={C.accentFg} width={2.4} />}</View>
               </Pressable>
             );
           })}
-        </ScrollView>
+        </View>
       </ScrollView>
+
+      <BottomBar inset={false}>
+        {chosen ? (
+          <>
+            <T.Muted style={{ fontSize: 12, textAlign: 'center' }}>We’ll check its tourism pressure and find greener options with the same vibe.</T.Muted>
+            <Button title={`Check ${chosen.name}`} icon="arrow" onPress={() => router.push(`/destination/${sel}`)} style={{ marginTop: 8 }} />
+          </>
+        ) : (
+          <Button title="Pick a destination" disabled />
+        )}
+      </BottomBar>
     </SafeAreaView>
   );
 }
 
 const s = StyleSheet.create({
-  pad: { padding: 20, paddingBottom: 32 },
-  head: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
-  search: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 18, paddingHorizontal: 14, borderRadius: 16, backgroundColor: C.surface, borderWidth: 1.5, borderColor: C.border },
-  searchInput: { flex: 1, fontFamily: F.medium, fontSize: 15, color: C.text, paddingVertical: 14 },
-  section: { marginTop: 26, marginBottom: 12 },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 14, padding: 10, paddingRight: 14, marginBottom: 10, borderRadius: 20, backgroundColor: C.surface, borderWidth: 1, borderColor: C.border },
-  thumb: { width: 64, height: 64, borderRadius: 14, alignItems: 'center', justifyContent: 'center' },
-  check: { alignItems: 'center', gap: 2 },
-  card: { width: 180, borderRadius: 20, backgroundColor: C.surface, borderWidth: 1, borderColor: C.border, overflow: 'hidden' },
-  cardArt: { height: 100, alignItems: 'center', justifyContent: 'center' },
+  pad: { padding: 20, paddingBottom: 24 },
+  head: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 12 },
+  prefs: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 16, minHeight: 48, paddingHorizontal: 14, borderRadius: 14, backgroundColor: C.accent50 },
+  search: { flexDirection: 'row', alignItems: 'center', gap: 10, marginTop: 10, paddingHorizontal: 14, borderRadius: 14, backgroundColor: C.surface, borderWidth: 1.5, borderColor: C.textFaint },
+  searchInput: { flex: 1, fontFamily: F.medium, fontSize: 15, color: C.text, paddingVertical: 13 },
+  section: { marginTop: 24, marginBottom: 10 },
+  none: { padding: 16, borderRadius: 20, backgroundColor: C.surface2, gap: 4 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: 12, padding: 10, paddingRight: 14, borderRadius: 20, backgroundColor: C.surface, borderWidth: 1.5, borderColor: C.border },
+  rowOn: { borderColor: C.accent, borderWidth: 2, backgroundColor: C.accent50 },
+  thumb: { width: 60, height: 60, borderRadius: 14 },
+  radio: { width: 24, height: 24, borderRadius: 99, borderWidth: 2, borderColor: C.textFaint, alignItems: 'center', justifyContent: 'center' },
+  radioOn: { backgroundColor: C.accent, borderColor: C.accent },
 });
