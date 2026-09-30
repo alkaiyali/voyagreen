@@ -1,0 +1,43 @@
+{
+ "idea": "VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure, suggests a lower-pressure alternative with a similar vibe when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
+ "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
+ "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
+ "demo": "1. Pick Boracay, set 3 days and interests (beach, food, snorkeling); 2. VoyaGreen shows Boracay's tourism-pressure score (High) with the indicators behind it and suggests a lower-pressure alternative with the same vibe; 3. Tap the alternative and get a 3-day itinerary built around those interests, with a side-by-side pressure comparison.",
+ "domainObject": "a leaf-shaped map pin",
+ "stack": "single-file static HTML (recommended)",
+ "hours": "4 hours",
+ "pain": "Every traveler gets sent to the same handful of famous spots, so those places get overcrowded and strained while the traveler never sees how much pressure their choice adds.",
+ "character": "Kyla, a college student in Quezon City planning her barkada's summer trip, who books Boracay because it is the first thing every TikTok and travel site shows her",
+ "painPoints": [
+  "Recommendations rank by popularity, price and distance — never by the pressure on the place",
+  "Sustainability data exists but is scattered, and nobody researches it before booking",
+  "Lesser-known places with the same vibe stay invisible"
+ ],
+ "hook": "Kyla has three days, a barkada, and one question: where do we go? Every app she opens gives her the same answer — the place everyone else is already going.",
+ "closer": "VoyaGreen doesn't tell travelers to stay home — it shows them somewhere just as good that the crowd hasn't found yet. Travel greener, not less.",
+ "qa": "Where does the pressure score come from? | For the demo it's a seeded model combining visitor density, carrying capacity, and environmental indicators per destination; the real version would pull tourism arrival and environmental data from public sources. ; Is the itinerary AI-generated? | In this MVP it is assembled from a curated set of activities matched to your interests and trip length — no live AI call, so it never fails on stage. ; What doesn't work yet? | Destination data is seeded for a handful of Philippine places, there is no booking, no accounts, and no live data feed — those are next. ; Won't this just move the crowd to the alternative? | That's why the score is live-updated in the full version — alternatives rotate as their own pressure rises, so we spread visitors instead of relocating the crowd.",
+ "pitch30": "Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you book, and if it's overcrowded it recommends a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain on the places we love.",
+ "next": [
+  "Live tourism and environmental data feeds",
+  "Booking with local operators",
+  "Crowd rotation so alternatives never become the next hotspot"
+ ],
+ "decided": [
+  "who",
+  "core",
+  "demo",
+  "domainObject",
+  "stack",
+  "pain",
+  "character",
+  "painPoints",
+  "hook",
+  "closer",
+  "qa",
+  "pitch30",
+  "next"
+ ],
+ "sources": [
+  ".hackathon/context/brief.md"
+ ]
+}
