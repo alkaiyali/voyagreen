@@ -1,18 +1,13 @@
 # Goals — voyagreen
 
-**Current goal: 6/7 · script — Write the demo script** (owner: pitcher).
+**Current goal: 7/7 · rehearse — Rehearse** (owner: all three).
 
 Success looks like:
-- [ ] 100–340 spoken words (~2 minutes, memorizable)
-- [ ] at least 4 beats, plus a 30-second fallback and Q&A
-- [ ] every beat names a real slide and tells the operator when to advance
-- [ ] slide numbers cover the whole deck and only move forward
-- [ ] the live demo switches to the app and back to the same slide — never stranded on the app
-- [ ] opens on a named person and the problem — never a greeting or the team name
-- [ ] ends on the impact and a tagline — never "thank you, any questions"
-- [ ] nothing on the SPEC cut list is presented as built
+- [ ] backup recording (demo-backup.mp4) of the full demo path, 15s+
+- [ ] cold restart passes — the app survives being killed and restarted
+- [ ] deck and script gates still green after last-minute edits
 
-Verify with `node harness.mjs check script`, advance with `node harness.mjs done`.
+Verify with `node harness.mjs check rehearse`, advance with `node harness.mjs done`.
 
 ## All goals
 
@@ -41,18 +36,18 @@ Verify with `node harness.mjs check script`, advance with `node harness.mjs done
   - [x] 4–5 slides
   - [x] numbers are measured with a source, or labelled a projection — never implied traction
   - [x] nothing on the SPEC cut list is presented as built (only on What's next)
-- [ ] **6 · script — Write the demo script** · pitcher ← current
-  - [ ] 100–340 spoken words (~2 minutes, memorizable)
-  - [ ] at least 4 beats, plus a 30-second fallback and Q&A
-  - [ ] every beat names a real slide and tells the operator when to advance
-  - [ ] slide numbers cover the whole deck and only move forward
-  - [ ] the live demo switches to the app and back to the same slide — never stranded on the app
-  - [ ] opens on a named person and the problem — never a greeting or the team name
-  - [ ] ends on the impact and a tagline — never "thank you, any questions"
-  - [ ] nothing on the SPEC cut list is presented as built
-- [ ] **7 · rehearse — Rehearse** · all three
+- [x] **6 · script — Write the demo script** · pitcher (done 12:26)
+  - [x] 100–340 spoken words (~2 minutes, memorizable)
+  - [x] at least 4 beats, plus a 30-second fallback and Q&A
+  - [x] every beat names a real slide and tells the operator when to advance
+  - [x] slide numbers cover the whole deck and only move forward
+  - [x] the live demo switches to the app and back to the same slide — never stranded on the app
+  - [x] opens on a named person and the problem — never a greeting or the team name
+  - [x] ends on the impact and a tagline — never "thank you, any questions"
+  - [x] nothing on the SPEC cut list is presented as built
+- [ ] **7 · rehearse — Rehearse** · all three ← current
   - [ ] backup recording (demo-backup.mp4) of the full demo path, 15s+
   - [ ] cold restart passes — the app survives being killed and restarted
   - [ ] deck and script gates still green after last-minute edits
 
-_Regenerated 2026-09-30T04:25:50.864Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
+_Regenerated 2026-09-30T04:26:00.433Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
