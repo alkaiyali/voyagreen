@@ -1,16 +1,18 @@
 # Goals — voyagreen
 
-**Current goal: 5/7 · deck — Build the deck** (owner: pitcher).
+**Current goal: 6/7 · script — Write the demo script** (owner: pitcher).
 
 Success looks like:
-- [ ] deck/slides.html exists, generated from the recorded answers
-- [ ] zero unfilled placeholders
-- [ ] no generic fonts or downloaded icon packs
-- [ ] 4–5 slides
-- [ ] numbers are measured with a source, or labelled a projection — never implied traction
-- [ ] nothing on the SPEC cut list is presented as built (only on What's next)
+- [ ] 100–340 spoken words (~2 minutes, memorizable)
+- [ ] at least 4 beats, plus a 30-second fallback and Q&A
+- [ ] every beat names a real slide and tells the operator when to advance
+- [ ] slide numbers cover the whole deck and only move forward
+- [ ] the live demo switches to the app and back to the same slide — never stranded on the app
+- [ ] opens on a named person and the problem — never a greeting or the team name
+- [ ] ends on the impact and a tagline — never "thank you, any questions"
+- [ ] nothing on the SPEC cut list is presented as built
 
-Verify with `node harness.mjs check deck`, advance with `node harness.mjs done`.
+Verify with `node harness.mjs check script`, advance with `node harness.mjs done`.
 
 ## All goals
 
@@ -32,14 +34,14 @@ Verify with `node harness.mjs check deck`, advance with `node harness.mjs done`.
   - [x] real-looking seed data so nothing is ever empty on stage
   - [x] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
   - [x] screenshot captured at .hackathon/evidence/ui.png
-- [ ] **5 · deck — Build the deck** · pitcher ← current
-  - [ ] deck/slides.html exists, generated from the recorded answers
-  - [ ] zero unfilled placeholders
-  - [ ] no generic fonts or downloaded icon packs
-  - [ ] 4–5 slides
-  - [ ] numbers are measured with a source, or labelled a projection — never implied traction
-  - [ ] nothing on the SPEC cut list is presented as built (only on What's next)
-- [ ] **6 · script — Write the demo script** · pitcher
+- [x] **5 · deck — Build the deck** · pitcher (done 12:25)
+  - [x] deck/slides.html exists, generated from the recorded answers
+  - [x] zero unfilled placeholders
+  - [x] no generic fonts or downloaded icon packs
+  - [x] 4–5 slides
+  - [x] numbers are measured with a source, or labelled a projection — never implied traction
+  - [x] nothing on the SPEC cut list is presented as built (only on What's next)
+- [ ] **6 · script — Write the demo script** · pitcher ← current
   - [ ] 100–340 spoken words (~2 minutes, memorizable)
   - [ ] at least 4 beats, plus a 30-second fallback and Q&A
   - [ ] every beat names a real slide and tells the operator when to advance
@@ -53,4 +55,4 @@ Verify with `node harness.mjs check deck`, advance with `node harness.mjs done`.
   - [ ] cold restart passes — the app survives being killed and restarted
   - [ ] deck and script gates still green after last-minute edits
 
-_Regenerated 2026-09-30T04:24:44.243Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
+_Regenerated 2026-09-30T04:25:50.864Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._

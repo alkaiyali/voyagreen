@@ -11,3 +11,6 @@
 {"at":1790742220835,"event":"intake","phase":"build","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
 {"at":1790742270191,"event":"advance","phase":"ui","detail":"from=build note="}
 {"at":1790742284234,"event":"advance","phase":"deck","detail":"from=ui note="}
+{"at":1790742289555,"event":"intake","phase":"deck","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
+{"at":1790742336763,"event":"intake","phase":"deck","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
+{"at":1790742350860,"event":"advance","phase":"script","detail":"from=deck note="}

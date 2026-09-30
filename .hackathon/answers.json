@@ -1,6 +1,6 @@
 {
-  "at": 1790742220833,
-  "idea": "VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure, suggests a lower-pressure alternative with a similar vibe when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
+  "at": 1790742336762,
+  "idea": "VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip. It scores a destination's tourism pressure from environmental and crowding indicators, suggests a greener alternative when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
   "demo": [
@@ -10,19 +10,19 @@
   ],
   "demoProposed": false,
   "domainObject": "a leaf-shaped map pin",
-  "pain": "Every traveler gets sent to the same handful of famous spots, so those places get overcrowded and strained while the traveler never sees how much pressure their choice adds.",
+  "pain": "Every traveler gets sent to the same few famous spots, so those places get overcrowded and strained, and nobody sees the pressure their choice adds.",
   "painPoints": [
-    "Recommendations rank by popularity, price and distance — never by the pressure on the place",
-    "Sustainability data exists but is scattered, and nobody researches it before booking",
+    "Recommendations rank by popularity, price and distance, never by the pressure on the place",
+    "Sustainability data exists but is scattered, and nobody checks it before choosing a trip",
     "Lesser-known places with the same vibe stay invisible"
   ],
   "hook": "Kyla has three days, a barkada, and one question: where do we go? Every app she opens gives her the same answer — the place everyone else is already going.",
   "character": "Kyla, a college student in Quezon City planning her barkada's summer trip, who books Boracay because it is the first thing every TikTok and travel site shows her",
-  "closer": "VoyaGreen doesn't tell travelers to stay home — it shows them somewhere just as good that the crowd hasn't found yet. Travel greener, not less.",
+  "closer": "VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less.",
   "proof": [],
   "how": "Pick a place, your days and your interests. VoyaGreen scores its tourism pressure, shows the indicators behind it, and if it's High, swaps in a same-vibe place and builds your itinerary there.",
-  "hardPart": "Making the swap feel like the same trip: alternatives match on vibe, and every day slot is filled from curated activities that fit your interests, all offline, so it can't fail on stage.",
-  "pitch30": "Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you book, and if it's overcrowded it recommends a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain on the places we love.",
+  "hardPart": "making the swap feel like the same trip: same vibe, and every day built from your own interests",
+  "pitch30": "Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you go. If it's crowded, it finds a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain.",
   "qa": [
     {
       "q": "Where does the pressure score come from?",
@@ -43,12 +43,12 @@
   ],
   "event": "",
   "next": [
-    "Live tourism and environmental data feeds",
+    "Live tourism and environment data",
     "Booking with local operators",
-    "Crowd rotation so alternatives never become the next hotspot"
+    "Crowd rotation between spots"
   ],
   "impact": [],
-  "stack": "single-file static HTML (recommended)",
+  "stack": "a single static HTML file with vanilla JS",
   "hours": "4 hours",
   "team": "",
   "decided": [

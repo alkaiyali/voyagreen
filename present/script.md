@@ -1,6 +1,6 @@
 # Demo script — voyagreen
 
-**Presenter** speaks. **Operator** advances. 4 slides, 8 beats, ~78s (194 spoken words).
+**Presenter** speaks. **Operator** advances. 4 slides, 8 beats, ~79s (197 spoken words).
 
 > Operator: keep this open on the slide deck machine. Advance only when you hear the trigger.
 
@@ -9,12 +9,12 @@
 | Beat | Screen | Slide title | Cue |
 |------|--------|-------------|-----|
 | 1 | Slide 1 | Voyagreen | ▶ ADVANCE to Slide 2 after "...else is already going." |
-| 2 | Slide 2 | The problem | ▶ ADVANCE to Slide 3 after "...distance — never by…" |
+| 2 | Slide 2 | The problem | ▶ ADVANCE to Slide 3 after "...pressure on the place" |
 | 3 | Slide 3 | What we built | ⇄ SWITCH to the app after "...show you it working" |
 | 4 | **App** | What we built | HOLD — stay on the app |
 | 5 | **App** | What we built | HOLD — stay on the app |
 | 6 | **App** | What we built | ⇄ SWITCH back to the deck, Slide 3, after "...a side-by-side pressure comparison." |
-| 7 | Slide 3 | What we built | ▶ ADVANCE to Slide 4 after "...is filled from curated…" |
+| 7 | Slide 3 | What we built | ▶ ADVANCE to Slide 4 after "...from your own interests." |
 | 8 | Slide 4 | What's next | END — stop on this slide |
 
 ## Beats
@@ -25,9 +25,9 @@
 **Operator:** ▶ ADVANCE to Slide 2 after "...else is already going."
 
 ### Beat 2 · Slide 2 — The problem
-**Say:** "Every traveler gets sent to the same handful of famous spots, so those places get overcrowded and strained while the traveler never sees how much pressure their choice adds. Recommendations rank by popularity, price and distance — never by…"
+**Say:** "Every traveler gets sent to the same few famous spots, so those places get overcrowded and strained, and nobody sees the pressure their choice adds. Recommendations rank by popularity, price and distance, never by the pressure on the place"
 **Do:** Point at the headline.
-**Operator:** ▶ ADVANCE to Slide 3 after "...distance — never by…"
+**Operator:** ▶ ADVANCE to Slide 3 after "...pressure on the place"
 
 ### Beat 3 · Slide 3 — What we built
 **Say:** "Let me show you it working."
@@ -54,18 +54,18 @@
 **Operator:** ⇄ SWITCH back to the deck, Slide 3, after "...a side-by-side pressure comparison."
 
 ### Beat 7 · Slide 3 — What we built
-**Say:** "We built it with single-file static HTML (recommended); the hard part was Making the swap feel like the same trip: alternatives match on vibe, and every day slot is filled from curated…"
+**Say:** "We built it with a single static HTML file with vanilla JS; the hard part was making the swap feel like the same trip: same vibe, and every day built from your own interests."
 **Do:** One line per bullet, no lingering.
-**Operator:** ▶ ADVANCE to Slide 4 after "...is filled from curated…"
+**Operator:** ▶ ADVANCE to Slide 4 after "...from your own interests."
 
 ### Beat 8 · Slide 4 — What's next
-**Say:** "Next we'd add Live tourism and environmental data feeds, Booking with local operators, Crowd rotation so alternatives never become the next hotspot. VoyaGreen doesn't tell travelers to stay home — it shows them somewhere just as good that…"
+**Say:** "Next we'd add Live tourism and environment data, Booking with local operators, Crowd rotation between spots. VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less."
 **Do:** Land the closing line. Stop talking. Do not say "thank you, any questions" — let the line hang.
 **Operator:** END — stop on this slide
 
 ## 30-second short version
 
-"Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you book, and if it's overcrowded it recommends a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain on the…"
+"Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you go. If it's crowded, it finds a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain."
 
 Do this one if the timer is already red: say it over Slides 1, 2 and the last slide.
 

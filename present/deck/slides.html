@@ -396,17 +396,17 @@
     <div class="hero-object ho-cover" aria-hidden="true"></div>
     <p class="kicker" data-anim="fade">Hackathon · Sep 2026</p>
     <h1 data-anim="reveal">Voyagreen</h1>
-    <p class="lede" data-anim="type">VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure,…</p>
+    <p class="lede" data-anim="type">VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip</p>
   </section>
 
   <section class="slide" data-title="The problem" data-transition="zoom">
     <div class="hero-object ho-problem" aria-hidden="true"></div>
     <h2 data-anim="split">The problem</h2>
     <p class="person" data-anim="rise">Kyla, a college student in Quezon City planning her barkada's summer trip, who books Boracay because it is the first thing every TikTok and travel site shows her</p>
-    <p class="statement" data-anim="rise">Every traveler gets sent to the same handful of famous spots, so those places get overcrowded and strained while the traveler never sees how much pressure their choice adds.</p>
+    <p class="statement" data-anim="rise">Every traveler gets sent to the same few famous spots, so those places get overcrowded and strained, and nobody sees the pressure their choice adds.</p>
     <ul data-anim="stagger">
-      <li>Recommendations rank by popularity, price and distance — never by the pressure on the place</li>
-      <li>Sustainability data exists but is scattered, and nobody researches it before booking</li>
+      <li>Recommendations rank by popularity, price and distance, never by the pressure on the place</li>
+      <li>Sustainability data exists but is scattered, and nobody checks it before choosing a trip</li>
       <li>Lesser-known places with the same vibe stay invisible</li>
     </ul>
   </section>
@@ -422,6 +422,7 @@
     <!-- the real app: `deck --init` copies the ui-gate screenshot to
          assets/app.png and keeps this figure; with no screenshot it is dropped.
          The only photograph ever allowed on a slide is the real product. -->
+    <figure class="shot" data-needs="shot" data-anim="scale"><img src="assets/app.png" alt="The app, running"></figure>
     <ol class="steps" data-anim="checklist">
       <li>Pick Boracay, set 3 days and interests: beach, food, snorkeling</li>
       <li>See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe</li>
@@ -430,9 +431,9 @@
     <pre class="flow" data-anim="wipe"><code>[ input ] ──▶ [ The pressure check and swap:… ] ──▶ [ result ]</code></pre>
     <p class="note" data-anim="fade">Pick a place, your days and your interests. VoyaGreen scores its tourism pressure, shows the indicators behind it, and if it's High, swaps in a same-vibe place and builds your itinerary there.</p>
     <ul class="facts" data-anim="stagger">
-      <li><strong>Frontend</strong> — single-file static HTML (recommended)</li>
+      <li><strong>Frontend</strong> — a single static HTML file with vanilla JS</li>
       <li><strong>Backend / API</strong> — None — everything runs in the browser</li>
-      <li><strong>The hard part</strong> — Making the swap feel like the same trip: alternatives match on vibe, and every day slot is filled from curated activities that fit your interests, all offline, so it can't fail on stage.</li>
+      <li><strong>The hard part</strong> — making the swap feel like the same trip: same vibe, and every day built from your own interests</li>
     </ul>
   </section>
 
@@ -440,11 +441,11 @@
     <div class="hero-object ho-next" aria-hidden="true"></div>
     <h2 data-anim="split">What's next</h2>
     <ul data-anim="stagger">
-      <li>Live tourism and environmental data feeds</li>
+      <li>Live tourism and environment data</li>
       <li>Booking with local operators</li>
-      <li>Crowd rotation so alternatives never become the next hotspot</li>
+      <li>Crowd rotation between spots</li>
     </ul>
-    <p class="closing" data-anim="rise">VoyaGreen doesn't tell travelers to stay home — it shows them somewhere just as good that the crowd hasn't found yet. Travel greener, not less.</p>
+    <p class="closing" data-anim="rise">VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less.</p>
   </section>
 
 </main>
