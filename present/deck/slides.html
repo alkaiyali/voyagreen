@@ -3,11 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Voyagreen</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300..700&display=swap" rel="stylesheet">
+<title>VoyaGreen</title>
+<meta name="color-scheme" content="light">
+<!-- Local fonts only: nothing in <head> waits on the network, so the first paint
+     is the deck — never a blank (or, in a dark browser, black) page while a font
+     CDN is slow on venue wifi. palette.css loads after the template's defaults. -->
+<style>
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+  @font-face { font-family: 'Azeret Mono'; src: url('assets/fonts/AzeretMono.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+  html { background: var(--ink, #fff); }
+</style>
 <style>
   /* ═════════════════════════════════════════════════════════════════════════
      DECK ENGINE. The file IS the presentation: no build step, no
@@ -179,6 +187,9 @@
   .person { font-size: 24px; color: var(--paper); border-left: 3px solid var(--accent); padding-left: 18px; margin-bottom: 18px; max-width: 32em; }
   .proof li strong { color: var(--paper); font-size: 30px; font-weight: 600; }
   .closing { color: var(--paper); font-weight: 600; font-size: 30px; margin-top: auto; max-width: 30em; }
+  .slide.closer { justify-content: center; }
+  .slide.closer .closing { margin-top: 0; font-size: 50px; line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; max-width: 17em; }
+  .slide.closer .byline { font-family: var(--font-mono); font-size: 17px; color: var(--muted); margin-top: 28px; }
   .kicker { font-family: var(--font-mono); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-text, var(--accent)); margin-bottom: 14px; }
 
   /* ── Products / device frame ─────────────────────────────────────────────── */
@@ -269,10 +280,6 @@
   .slide.reveal { padding: 0; background: var(--ink); }
   .slide.reveal::before { display: none; }
   .slide.reveal > .reveal-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-
-  /* ── Typing: data-anim="type" types the line out behind a caret ─────────── */
-  .caret { display: inline-block; width: .07em; height: 1.02em; margin-left: .08em; vertical-align: -0.14em;
-    background: var(--accent); animation: deck-blink 1s steps(1) infinite; }
 
   /* ── Kinetic type: data-anim="split" ────────────────────────────────────── */
   .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .1em; margin-bottom: -.1em; }
@@ -392,11 +399,10 @@
 <div id="stage">
 <main class="deck" id="deck">
 
-  <section class="slide cover" data-title="Voyagreen">
+  <section class="slide cover" data-title="VoyaGreen">
     <div class="hero-object ho-cover" aria-hidden="true"></div>
-    <p class="kicker" data-anim="fade">Hackathon · Sep 2026</p>
-    <h1 data-anim="reveal">Voyagreen</h1>
-    <p class="lede" data-anim="type">VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip</p>
+    <h1 data-anim="reveal">VoyaGreen</h1>
+    <p class="lede" data-anim="rise">VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip</p>
   </section>
 
   <section class="slide" data-title="The problem" data-transition="zoom">
@@ -424,27 +430,21 @@
          The only photograph ever allowed on a slide is the real product. -->
     <figure class="shot" data-needs="shot" data-anim="scale"><img src="assets/app.png" alt="The app, running"></figure>
     <ol class="steps" data-anim="checklist">
-      <li>Pick Boracay, set 3 days and interests: beach, food, snorkeling</li>
-      <li>See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe</li>
-      <li>Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison</li>
+      <li>Open VoyaGreen: quick onboarding, then pick beach, food and snorkeling for a 3-day trip</li>
+      <li>Tap Boracay: its tourism-pressure score is High (87), with the indicators behind it and a greener pick with the same vibe, Carabao Island</li>
+      <li>Tap Carabao Island: a 3-day itinerary built on those interests, 58 points lower pressure, saved to My trips</li>
     </ol>
     <pre class="flow" data-anim="wipe"><code>[ input ] ──▶ [ The pressure check and swap:… ] ──▶ [ result ]</code></pre>
     <p class="note" data-anim="fade">Pick a place, your days and your interests. VoyaGreen scores its tourism pressure, shows the indicators behind it, and if it's High, swaps in a same-vibe place and builds your itinerary there.</p>
     <ul class="facts" data-anim="stagger">
-      <li><strong>Frontend</strong> — a single static HTML file with vanilla JS</li>
-      <li><strong>Backend / API</strong> — None — everything runs in the browser</li>
+      <li><strong>Frontend</strong> — React Native with Expo</li>
       <li><strong>The hard part</strong> — making the swap feel like the same trip: same vibe, and every day built from your own interests</li>
     </ul>
   </section>
 
-  <section class="slide" data-title="What's next" data-needs="next" data-transition="focus">
+  <section class="slide closer" data-title="Travel greener, not less" data-transition="focus">
     <div class="hero-object ho-next" aria-hidden="true"></div>
-    <h2 data-anim="split">What's next</h2>
-    <ul data-anim="stagger">
-      <li>Live tourism and environment data</li>
-      <li>Booking with local operators</li>
-      <li>Crowd rotation between spots</li>
-    </ul>
+    <p class="kicker" data-anim="fade">VoyaGreen</p>
     <p class="closing" data-anim="rise">VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less.</p>
   </section>
 
@@ -705,23 +705,6 @@
           { clipPath: 'inset(-10% 0 -10% 0)', filter: 'blur(0)', transform: 'none' }
         ], { duration: 1150, delay: delay, easing: EASE, fill: 'both' });
         finish(el);
-        return;
-      }
-      case 'type': {
-        // typed out behind a caret, like the product's own input
-        if (el.__text == null) el.__text = el.textContent.trim();
-        var full = el.__text, n = 0, caret = document.createElement('span');
-        caret.className = 'caret'; caret.setAttribute('aria-hidden', 'true');
-        el.setAttribute('aria-label', full); el.textContent = ''; el.appendChild(caret); finish(el);
-        el.__timers = [];
-        var step = Math.max(14, Math.min(34, 1400 / Math.max(1, full.length)));
-        (function tick() {
-          el.__timers.push(setTimeout(function () {
-            n += 1; el.textContent = full.slice(0, n); el.appendChild(caret);
-            if (n < full.length) tick();
-            else el.__timers.push(setTimeout(function () { caret.remove(); }, 1600));
-          }, n ? step : delay + 250));
-        })();
         return;
       }
       case 'checklist': {

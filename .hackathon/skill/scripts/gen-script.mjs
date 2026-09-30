@@ -146,7 +146,8 @@ export function generateScript({ answers, deckText, name }) {
       // sentence — never repeat the whole hook we opened with
       // judges remember the last line: the team's closer, or a flagged draft
       const closer = String(a.closer || '').trim();
-      const nextLine = next.length ? `Next we'd add ${next.slice(0, 3).join(', ')}.` : '';
+      // only narrate next steps when the deck actually shows them
+      const nextLine = next.length && /next/i.test(t) ? `Next we'd add ${next.slice(0, 3).join(', ')}.` : '';
       beats.push({
         slide: n, title: t,
         say: closer

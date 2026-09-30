@@ -25,14 +25,30 @@ const short = (s, max = 34) => {
   return t.length <= max ? t : t.slice(0, max).replace(/\s+\S*$/, '') + '…';
 };
 
+// The byline is the team's names, as they gave them: "Ana Cruz, Ben Reyes" -> "Ana Cruz · Ben Reyes".
+// Role notes in parentheses are dropped; a long free-form answer is shortened.
 const teamNames = (s) => {
-  const raw = String(s || '').trim();
+  const raw = Array.isArray(s) ? s.join(', ') : String(s || '').trim();
   if (!raw) return '';
-  const parts = raw.split(/\s*[,;·]\s*/).filter(Boolean);
-  const names = parts.map(p => p.split(/\s+/)[0]).filter(Boolean);
-  if (names.length >= 2 && names.length <= 5) return names.join(' · ');
-  return short(raw, 48);
+  const parts = raw.replace(/\([^)]*\)/g, '').split(/\s*(?:[,;·\n]|\band\b)\s*/).map(p => p.trim()).filter(Boolean);
+  if (parts.length >= 1 && parts.length <= 6 && parts.every(p => p.split(/\s+/).length <= 4)) return parts.join(' · ');
+  return short(raw, 72);
 };
+
+// The closing slide's title: the closer's tagline ("… Travel greener, not less." -> "Travel greener, not less").
+const closingTitle = (closer) => {
+  const sentences = String(closer || '').trim().split(/(?<=[.!?])\s+/).filter(Boolean);
+  const tag = (sentences[sentences.length - 1] || '').replace(/[.!]$/, '');
+  return tag && tag.length <= 40 ? tag : 'The close';
+};
+
+// Fonts ship with the skill so the deck never waits on a font CDN.
+export function installDeckFonts(deckDir) {
+  const src = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'templates', 'fonts');
+  const dst = path.join(deckDir, 'assets', 'fonts');
+  fs.mkdirSync(dst, { recursive: true });
+  for (const f of fs.readdirSync(src)) fs.copyFileSync(path.join(src, f), path.join(dst, f));
+}
 
 // "voicetasks" -> "Voicetasks", "voice-tasks" -> "Voice Tasks", "IRCite" left alone
 const titleCase = (s) => {
@@ -55,11 +71,12 @@ export function buildSubs(a, name, date = new Date()) {
   const oneLiner = a.oneLiner ? String(a.oneLiner).trim() : firstSentence(a.idea, 96);
 
   const subs = [
-    ['<PROJECT NAME>', titleCase(name)],
+    ['<PROJECT NAME>', a.appName ? String(a.appName).trim() : titleCase(name)],
+    ['<CLOSING TITLE>', closingTitle(a.closer)],
     ['<one-liner: "X for Y, without Z">', oneLiner],
     ['<TEAM>', teamNames(a.team)],
-    ['<HACKATHON>', a.event || 'Hackathon'],
-    ['<DATE>', date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' })],
+    // the event's name, as the team gave it — never a generic "Hackathon · <month>" filler
+    ['<HACKATHON>', String(a.event || '').trim()],
     ['<The person — name, who, one vivid moment>', String(a.character || '').trim()],
     ['<One bold statement of the pain.>', String(a.pain || '').trim()],
     ['<Pain point 1 — make it hurt>', painPoints[0] || ''],
@@ -174,6 +191,7 @@ if (process.argv[1]?.endsWith('gen-deck.mjs')) {
   }
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const assets = path.join(layout(proj).deck, 'assets');
+  installDeckFonts(layout(proj).deck);
   fs.writeFileSync(out, generateDeck({ answers, name: state.name, shot: fs.existsSync(path.join(assets, 'app.png')), reveal: fs.existsSync(path.join(assets, 'reveal.mp4')) }));
   console.log(`gen-deck: wrote ${path.relative(proj, out)}`);
   process.exit(0);

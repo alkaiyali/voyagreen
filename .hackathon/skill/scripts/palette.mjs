@@ -200,6 +200,20 @@ export function renderCss(p, source = '') {
 
 // Pull simple colour custom properties out of CSS text (last one wins) and
 // resolve var() aliases, so gates can check what a page actually uses.
+// The same tokens as a JS module, for apps that cannot read CSS variables
+// (React Native / Expo, canvas, SVG built in code). Hex values only — the
+// deck-alias lines (var(), color-mix) are CSS-only and are skipped.
+export function renderJs(css) {
+  const out = {};
+  for (const m of css.matchAll(/--([a-z0-9-]+):\s*(#[0-9A-Fa-f]{3,8})\s*;/g)) {
+    out[m[1].replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase())] = m[2];
+  }
+  return `// palette.js — generated with palette.css by \`node harness.mjs palette\`. Do not hand-edit.\n` +
+    `// Same tokens as palette.css: bg, surface, text, textMuted, accent, accentText, accent50…accent900,\n` +
+    `// success/warning/danger/info (+Bg, +Border). Status is never the accent.\n` +
+    `export const palette = ${JSON.stringify(out, null, 2)};\nexport default palette;\n`;
+}
+
 export function readTokens(...cssTexts) {
   const map = {};
   for (const css of cssTexts) {

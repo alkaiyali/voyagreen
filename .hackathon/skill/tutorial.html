@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to use the hackathon harness — a tutorial</title>
+<meta name="description" content="A hands-on tutorial for the hackathon harness: the phase loop, the gates, and the commands that turn a 4-hour idea into a demo, a deck, and a script.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #09090b; --ink-2: #3f3f46; --muted: #71717a; --faint: #a1a1aa;
+    --line: #e8e8ec; --bg: #fbfbfc; --card: #ffffff; --accent: #5b21b6; --accent-2: #2563eb;
+    --ok: #15803d; --warn: #b45309; --stop: #b91c1c;
+    --code-bg: #0b0b14; --code-ink: #e7e7ea;
+    --shadow-md: 0 2px 4px rgba(9,9,11,.03), 0 8px 24px -8px rgba(9,9,11,.08);
+    --shadow-lg: 0 4px 8px rgba(9,9,11,.04), 0 24px 48px -16px rgba(9,9,11,.12);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --ink:#fafafa; --ink-2:#d4d4d8; --muted:#a1a1aa; --faint:#71717a;
+      --line:#27272a; --bg:#09090b; --card:#131316; --accent:#a78bfa; --accent-2:#60a5fa;
+      --ok:#4ade80; --warn:#fbbf24; --stop:#f87171;
+      --code-bg:#000; --code-ink:#e7e7ea;
+      --shadow-md: 0 8px 24px -8px rgba(0,0,0,.5); --shadow-lg: 0 24px 48px -16px rgba(0,0,0,.6); }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.62; letter-spacing: -0.011em; -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(124,58,237,.07), transparent 60%),
+      radial-gradient(700px 420px at 92% 4%, rgba(14,165,233,.055), transparent 60%);
+  }
+  .layout { position: relative; z-index: 1; display: grid; grid-template-columns: 248px minmax(0,1fr); gap: 56px; max-width: 1180px; margin: 0 auto; padding: 40px 24px 96px; }
+  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; gap: 0; } nav.toc { display: none; } }
+
+  /* ── nav ── */
+  nav.toc { position: sticky; top: 32px; align-self: start; font-size: 13.5px; }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-size: 11.5px; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+  .brand .mark { width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(145deg,#7c3aed,#5b21b6);
+    display: grid; place-items: center; box-shadow: 0 2px 6px rgba(91,33,182,.35); }
+  .brand .mark svg { width: 12px; height: 12px; }
+  nav.toc a { display: block; padding: 5px 0 5px 12px; color: var(--muted); text-decoration: none;
+    border-left: 2px solid var(--line); transition: color .15s, border-color .15s; }
+  nav.toc a:hover { color: var(--ink); border-color: var(--faint); }
+  nav.toc a.active { color: var(--accent); border-color: var(--accent); font-weight: 600; }
+  nav.toc .back { margin-top: 20px; font-size: 12.5px; }
+
+  /* ── content ── */
+  main { min-width: 0; }
+  section { margin-bottom: 58px; scroll-margin-top: 24px; }
+  .eyebrow { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 12px; }
+  h1 { font-size: clamp(2rem, 4.6vw, 2.85rem); line-height: 1.05; letter-spacing: -.04em; font-weight: 700; text-wrap: balance; }
+  h1 em { font-style: normal; background: linear-gradient(100deg,#7c3aed,#2563eb); -webkit-background-clip: text;
+    background-clip: text; -webkit-text-fill-color: transparent; }
+  @media (prefers-color-scheme: dark) { h1 em { background: linear-gradient(100deg,#a78bfa,#60a5fa); -webkit-background-clip: text; background-clip: text; } }
+  h2 { font-size: 24px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 14px; }
+  h3 { font-size: 16.5px; font-weight: 600; letter-spacing: -.015em; margin: 26px 0 8px; }
+  p { color: var(--ink-2); margin-bottom: 14px; text-wrap: pretty; }
+  p.lede { font-size: 17px; color: var(--muted); margin: 20px 0 8px; max-width: 62ch; }
+  a.inline { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  a.inline:hover { border-color: currentColor; }
+
+  code { font-family: "JetBrains Mono", ui-monospace, monospace; font-size: .85em;
+    background: color-mix(in srgb, var(--ink) 7%, transparent); border: 1px solid var(--line);
+    border-radius: 6px; padding: 1.5px 6px; }
+  .codewrap { position: relative; margin: 14px 0 18px; }
+  pre { background: var(--code-bg); color: var(--code-ink); border-radius: 14px; padding: 18px 20px;
+    overflow-x: auto; font-size: 13px; line-height: 1.7; box-shadow: var(--shadow-md); }
+  pre code { background: transparent; border: 0; padding: 0; color: inherit; font-size: inherit; }
+  pre .c { color: #8b8b98; }           /* comment */
+  pre .p { color: #c4b5fd; }           /* prompt/command */
+  pre .a { color: #7dd3fc; }           /* argument */
+  pre .s { color: #a5f3a8; }           /* string / value */
+  .copy { position: absolute; top: 9px; right: 9px; font: 600 11px/1 "JetBrains Mono", monospace;
+    color: #c9c9d2; background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.14);
+    border-radius: 7px; padding: 6px 9px; cursor: pointer; opacity: 0; transition: opacity .15s, background .15s; }
+  .codewrap:hover .copy, .copy:focus-visible { opacity: 1; }
+  .copy:hover { background: rgba(255,255,255,.16); }
+  .copy.done { color: #a5f3a8; border-color: rgba(165,243,168,.4); }
+
+  /* ── loop diagram ── */
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 18px 0 6px; }
+  .chip { font: 600 12.5px/1 "JetBrains Mono", monospace; padding: 9px 12px; border-radius: 10px;
+    background: var(--card); border: 1px solid var(--line); box-shadow: var(--shadow-md); color: var(--ink); }
+  .chip .n { color: var(--faint); margin-right: 6px; }
+  .arrow { color: var(--faint); font-size: 13px; }
+  @media (max-width: 640px) { .arrow { display: none; } .flow { gap: 7px; } }
+
+  /* ── cards / callouts ── */
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 16px 0; }
+  @media (max-width: 640px) { .grid { grid-template-columns: 1fr; } }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 18px 20px; box-shadow: var(--shadow-md); }
+  .card h3 { margin: 0 0 6px; }
+  .card p { margin: 0; font-size: 13.5px; }
+  .note { border-left: 3px solid var(--accent); background: color-mix(in srgb, var(--accent) 6%, transparent);
+    border-radius: 0 12px 12px 0; padding: 14px 18px; margin: 16px 0; }
+  .note.warn { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 8%, transparent); }
+  .note.stop { border-color: var(--stop); background: color-mix(in srgb, var(--stop) 7%, transparent); }
+  .note p { margin: 0; color: var(--ink); font-size: 14px; }
+  .note strong { letter-spacing: -.01em; }
+
+  /* ── tables ── */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-md); margin: 14px 0 6px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 560px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { font-size: 11px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); background: color-mix(in srgb, var(--ink) 3%, transparent); }
+  tr:last-child td { border-bottom: 0; }
+  td code { white-space: nowrap; }
+  .mono { font-family: "JetBrains Mono", monospace; font-size: 12.5px; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .stopc { color: var(--stop); font-weight: 600; }
+
+  footer { border-top: 1px solid var(--line); margin-top: 70px; padding-top: 22px; color: var(--faint); font-size: 12.5px; }
+  footer a { color: var(--muted); }
+  kbd { font: 600 11px/1 "JetBrains Mono", monospace; background: var(--card); border: 1px solid var(--line);
+    border-bottom-width: 2px; border-radius: 6px; padding: 3px 6px; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <nav class="toc" aria-label="Contents">
+    <div class="brand"><span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>Hackathon Harness</div>
+    <a href="#what">What it is</a>
+    <a href="#model">The mental model</a>
+    <a href="#start">Quick start</a>
+    <a href="#loop">Working the loop</a>
+    <a href="#phases">Phases &amp; gates</a>
+    <a href="#generate">Deck &amp; script</a>
+    <a href="#commands">Command reference</a>
+    <a href="#trouble">When it breaks</a>
+    <a href="#stage">On stage</a>
+    <a class="back" href="./index.html">← Back to the pack</a>
+  </nav>
+
+  <main>
+    <section id="what">
+      <div class="eyebrow">Tutorial</div>
+      <h1>Four hours, three people,<br><em>one harness that won't let you fake it.</em></h1>
+      <p class="lede">This is a hands-on walkthrough of the hackathon harness: a tiny Node program that owns the phase state and refuses to advance until the work is real. By the end you'll know every command you need and why the gates exist.</p>
+
+      <div class="grid">
+        <div class="card">
+          <h3>The tool</h3>
+          <p><code>harness.mjs</code> — a state machine with gates. It drives idea → app → deck → script and blocks progress on missing, empty, or placeholder artifacts.</p>
+        </div>
+        <div class="card">
+          <h3>What you produce</h3>
+          <p>A working demo, a demo-ready UI, a 4–5 slide deck, a memorizable script, and a backup recording — all generated from your own recorded answers.</p>
+        </div>
+      </div>
+
+      <div class="note">
+        <p><strong>The one idea:</strong> you shouldn't have to trust your own memory or optimism about what's done. The harness checks the disk, and only it decides when a phase is finished.</p>
+      </div>
+    </section>
+
+    <section id="model">
+      <h2>The mental model</h2>
+      <p>Everything runs through eight phases. Each phase has a <strong>gate</strong> — a real check against real files. Run <code>done</code> and the gate runs: pass it and the harness advances, commits, and prints your next action; fail it and you get <code>✗</code> lines telling you exactly what's missing, and you stay put.</p>
+
+      <div class="flow" aria-label="Phase order">
+        <span class="chip"><span class="n">0</span>ask</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">1</span>idea</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">2</span>spec</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">3</span>build</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">4</span>ui</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">5</span>deck</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">6</span>script</span><span class="arrow">→</span>
+        <span class="chip"><span class="n">7</span>rehearse</span>
+      </div>
+
+      <p style="margin-top:16px">Three commands are your whole loop: <code>status</code> to resume, <code>done</code> to advance, and <code>check</code> when one gate behaves oddly. Everything else exists to feed those gates real material.</p>
+
+      <div class="note warn">
+        <p><strong>Never hand-edit <code>.hackathon/state.json</code>.</strong> The harness owns that file. To skip a gate on purpose, use <code>done --force</code> — it records the skip in <code>.hackathon/log.jsonl</code> so it's visible later instead of silently lost.</p>
+      </div>
+    </section>
+
+    <section id="start">
+      <h2>Quick start</h2>
+      <p>The harness lives in this skill repo, but you never work inside it. Bootstrap a fresh project directory first — that copies <code>harness.mjs</code> into your idea's repo and <code>git init</code>s it, so the whole thing is self-contained.</p>
+
+      <h3>1 · Bootstrap once</h3>
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="c"># from the skill repo</span>
+<span class="p">cd</span> ~/repos/hackathon
+<span class="p">node</span> harness.mjs bootstrap <span class="a">../my-idea</span>
+
+<span class="c"># then work inside your project from here on</span>
+<span class="p">cd</span> ../my-idea</code></pre></div>
+
+      <h3>2 · Ask before you build — the agent runs the interview</h3>
+      <p>The idea phase cannot pass without recorded answers. The harness owns the <strong>questions and the bar</strong>; the agent conducts the <strong>interview</strong>, rendering the questions with its own question tool. Only three are required: the idea, who it's for, and the one core feature. Capture the answers <strong>verbatim</strong> — the deck and script are built from the user's own words, never from the agent's guesses.</p>
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="p">node</span> harness.mjs ask <span class="a">--json</span>     <span class="c"># schema: id/header/options/required/why</span>
+<span class="p">node</span> harness.mjs ask <span class="a">--pending</span>  <span class="c"># only what is still missing or thin</span></code></pre></div>
+
+      <h3>3 · Record the answers — then close the gaps</h3>
+      <p><code>intake</code> writes <code>HACKATHON.md</code>, <code>SPEC.md</code>, and <code>.hackathon/answers.json</code> straight from the user's words. <code>--report</code> returns a machine-readable gap list so the agent can re-ask only what is weak — and <code>intake</code> <strong>merges</strong>, so a second pass never wipes the first.</p>
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="p">node</span> harness.mjs intake <span class="a">--answers</span> answers.json <span class="a">--report</span>  <span class="c"># { ok, gaps:[…] }</span>
+<span class="p">node</span> harness.mjs ask <span class="a">--pending</span>                            <span class="c"># re-ask only those, then intake again</span></code></pre></div>
+      <p><strong>Quality in, quality out.</strong> The gap report has three tiers: <code>missing</code> (blocks the gate), <code>thin</code> (present but too vague to pitch), and <code>recommended</code> (absent — and it will cost you a slide or a beat later). The optional fields are what make the pitch: <code>--pain</code>, <code>--painPoints</code>, <code>--hook</code>, <code>--how</code>, <code>--hardPart</code>, <code>--pitch30</code>, <code>--qa "question|answer"</code>, <code>--demo</code>, <code>--domainObject</code>, <code>--event</code>, <code>--team</code>. Skip one and the generator drops what it can't source.</p>
+      <div class="note">
+        <p><strong>Stack defaults to a single-file static HTML.</strong> Zero install, fastest to a demo, and every gate (serve, screenshot) works with no tooling. Only reach for Vite + React if the idea genuinely needs routing or shared state — an <code>npm install</code> costs 15–30 minutes of a 240-minute budget.</p>
+      </div>
+    </section>
+
+    <section id="loop">
+      <h2>Working the loop</h2>
+      <p>From inside your project directory, the loop is two commands. Keep <code>status</code> open in a second terminal if you can.</p>
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="p">node</span> harness.mjs status   <span class="c"># phase, clock, gate results, the single next action</span>
+<span class="p">node</span> harness.mjs done     <span class="c"># run the gates; advance ONLY if they pass</span></code></pre></div>
+      <p>The plan stays visible, and it can't drift from reality because the harness maintains it from the same definitions the gates use:</p>
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="p">node</span> harness.mjs goals      <span class="c"># current goal + owners + success criteria (GOALS.md)</span>
+<span class="p">node</span> harness.mjs timeline   <span class="c"># phase windows against your deadline (TIMELINE.md)</span>
+<span class="p">node</span> harness.mjs note <span class="s">"..."</span> <span class="c"># decisions and learnings (NOTES.md)</span></code></pre></div>
+      <div class="note">
+        <p><strong>Resuming in a new session?</strong> Run <code>status</code>. It prints the phase and the next action — and never re-ask a question already recorded in <code>SPEC.md</code> or <code>answers.json</code>.</p>
+      </div>
+    </section>
+
+    <section id="phases">
+      <h2>Phases &amp; gates</h2>
+      <p>This table is the contract. The right column is what the gate actually verifies before it will let you move on.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>#</th><th>Phase</th><th>You produce</th><th>The gate checks</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">0</td><td class="mono">ask</td><td><code>.hackathon/answers.json</code></td><td>intake refuses without <strong>idea</strong>, <strong>who</strong>, and <strong>core</strong></td></tr>
+            <tr><td class="mono">1</td><td class="mono">idea</td><td><code>HACKATHON.md</code></td><td>intake recorded, idea ≥ 40 chars, one core feature, no placeholders</td></tr>
+            <tr><td class="mono">2</td><td class="mono">spec</td><td><code>SPEC.md</code></td><td>pitch, core feature, demo path, stack, cut list; ≥ 3 concrete demo steps</td></tr>
+            <tr><td class="mono">3</td><td class="mono">build</td><td>the app</td><td><strong>starts and serves real content</strong> (&gt; 300 bytes), no template tokens</td></tr>
+            <tr><td class="mono">4</td><td class="mono">ui</td><td>demo-ready UI</td><td>no lorem ipsum, screenshot captured, seed data referenced</td></tr>
+            <tr><td class="mono">5</td><td class="mono">deck</td><td><code>deck/slides.md</code> or <code>deck/slides.html</code></td><td>builds with <strong>zero placeholders</strong>, 4–5 slides, impact labelled a projection</td></tr>
+            <tr><td class="mono">6</td><td class="mono">script</td><td><code>script.md</code></td><td>100–340 spoken words, ≥ 4 beats, 30-second version, Q&amp;A, <strong>synced to the deck</strong></td></tr>
+            <tr><td class="mono">7</td><td class="mono">rehearse</td><td><code>demo-backup.mp4</code></td><td>recording ≥ 15s, <strong>cold restart</strong> passes, deck + script gates still green</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:14px">Start each phase with <code>status</code>, work until the artifact exists, then run <code>done</code>. Run <code>node harness.mjs smoke</code> any time you just want a quick "does my app actually serve?" check.</p>
+    </section>
+
+    <section id="generate">
+      <h2>Generate the deck &amp; script</h2>
+      <p>The deck and the script are <strong>generated from the same recorded answers</strong>, so they can't drift apart. Regenerate both after any change — never hand-edit one and leave the other stale.</p>
+
+      <h3>Two deck lanes</h3>
+      <p><strong>Lane M (default)</strong> writes <code>deck/slides.md</code> and renders it through Marp. <strong>Lane H</strong> writes a bespoke, self-contained <code>deck/slides.html</code> — no render step, no Marp — and it ships an animation engine: <code>data-anim</code> entrances, per-slide <code>data-transition</code>, a live atmosphere canvas, <code>data-morph</code> objects that travel between slides, and <code>data-build</code> for press-to-advance reveals. Add <code>--html</code> to choose it. If both files exist, Lane M wins — delete <code>slides.md</code> to present the HTML one. The gate and the script parse both lanes the same way.</p>
+
+      <div class="codewrap"><button class="copy" data-copy>copy</button><pre><code><span class="c"># once the app runs, record real demo numbers for the impact slide</span>
+<span class="p">node</span> harness.mjs impact <span class="s">"Hours saved per week=5"</span> <span class="s">"Blockers surfaced=3"</span>
+
+<span class="c"># deck ← answers.json; pick a lane, then render + review</span>
+<span class="p">node</span> harness.mjs deck <span class="a">--init</span> <span class="a">--force</span>          <span class="c"># Lane M → slides.md (Marp)</span>
+<span class="p">node</span> harness.mjs deck <span class="a">--init</span> <span class="a">--force</span> <span class="a">--html</span>   <span class="c"># Lane H → slides.html (bespoke)</span>
+<span class="p">node</span> harness.mjs deck <span class="a">--images</span>               <span class="c"># review PNGs, either lane</span>
+
+<span class="c"># script ← deck; the two stay in sync</span>
+<span class="p">node</span> harness.mjs script <span class="a">--init</span> <span class="a">--force</span></code></pre></div>
+
+      <h3>The split that matters: facts vs. voice</h3>
+      <p>The generator supplies <strong>structure and facts</strong> — slide order, titles, demo steps, stack, numbers, names. It <strong>never invents your voice</strong>. Any line it had to author is stamped so you can't mistake it for the real thing:</p>
+      <div class="codewrap"><pre><code>**Say:** "Here are the three things you're about to see."  **[DRAFT — rewrite in your own voice]**</code></pre></div>
+      <div class="note stop">
+        <p><strong>The script gate will not pass while a <code>[DRAFT]</code> remains.</strong> That's deliberate: generic filler must not reach the stage wearing your voice. Replace each flagged line — or supply <code>--hook</code>, <code>--how</code>, and <code>--qa</code> at intake and regenerate, and the drafts disappear.</p>
+      </div>
+      <div class="note">
+        <p><strong>A deck you have not seen is not a deck.</strong> Open <code>deck/slides.html</code> or the <code>slides.*.png</code> review images and look at them. The script gate enforces the sync too: every beat names a real slide, slide numbers only move forward and cover the whole deck, and titles must match the deck source (<code>deck/slides.md</code> or <code>deck/slides.html</code>) exactly.</p>
+      </div>
+    </section>
+
+    <section id="commands">
+      <h2>Command reference</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">bootstrap &lt;dir&gt;</td><td>Install the skill into a new project and <code>git init</code> it.</td></tr>
+            <tr><td class="mono">init &lt;name&gt;</td><td>Start the clock (<code>--hours 4 --deadline 18:00</code>).</td></tr>
+            <tr><td class="mono">ask [--json]</td><td>The intake question schema — <code>--json</code> for an agent's question tool; <code>--pending</code> for only what's missing or thin.</td></tr>
+            <tr><td class="mono">intake …</td><td>Record the answers (merges over what's on disk); <code>--report</code> returns the machine-readable gap list.</td></tr>
+            <tr><td class="mono">impact "m=v" …</td><td>Record real demo numbers for the deck's impact slide.</td></tr>
+            <tr><td class="mono">deck --init</td><td>Generate the deck from answers — <code>deck/slides.md</code> (Marp) or <code>--html</code> for a bespoke <code>deck/slides.html</code>; <code>--images</code> renders PNGs.</td></tr>
+            <tr><td class="mono">script --init</td><td>Generate <code>script.md</code>, synced to the deck.</td></tr>
+            <tr><td class="mono">status [--json]</td><td><strong>Run first every session.</strong> Phase, clock, gates, next action.</td></tr>
+            <tr><td class="mono">check [phase]</td><td>Run the gates for one phase in isolation.</td></tr>
+            <tr><td class="mono">done [--force]</td><td>Run the gates; advance only if they pass.</td></tr>
+            <tr><td class="mono">verify</td><td>Run every gate up to the current phase.</td></tr>
+            <tr><td class="mono">smoke</td><td>Quick "does the app actually serve?" check.</td></tr>
+            <tr><td class="mono">goals / timeline</td><td>Regenerate <code>GOALS.md</code> / <code>TIMELINE.md</code> from the gates.</td></tr>
+            <tr><td class="mono">note "…" / log "…"</td><td>Append to <code>NOTES.md</code> / the audit log.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="trouble">
+      <h2>When it breaks</h2>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Situation</th><th>Do</th></tr></thead>
+          <tbody>
+            <tr><td>"You cannot advance"</td><td>The <code>✗</code> lines name exactly what's missing — fix those.</td></tr>
+            <tr><td>Skipping a phase on purpose</td><td><code>done --force</code>; records the skip in <code>.hackathon/log.jsonl</code>, and <code>status</code> keeps showing it.</td></tr>
+            <tr><td>Lost your place / new session</td><td><code>node harness.mjs status</code> — it prints the phase and the next action.</td></tr>
+            <tr><td>One gate failing oddly</td><td><code>node harness.mjs check &lt;phase&gt;</code> runs just that gate.</td></tr>
+            <tr><td>Everything, all at once</td><td><code>node harness.mjs verify</code> runs every gate up to the current phase.</td></tr>
+            <tr><td>App won't start for the gates</td><td>Add <code>.hackathon/config.json</code>: <code>{"START_CMD":"npm run dev","PORT":5173}</code>.</td></tr>
+            <tr><td>Deck render fails offline</td><td>Lane M only. Run once with wifi: <code>npx @marp-team/marp-cli --version</code>, then it's cached — or switch to the HTML lane: <code>deck --init --html</code>.</td></tr>
+            <tr><td>Screenshots fail</td><td>Install Chrome or Edge; the UI gate degrades to a warning without one.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">
+        <p><strong>Requirements:</strong> Node 18+. The <code>build</code>, <code>ui</code>, and <code>rehearse</code> gates start your app, so they need Python 3 (static apps) or your package manager; the <code>ui</code> gate needs Chrome or Edge for screenshots.</p>
+      </div>
+    </section>
+
+    <section id="stage">
+      <h2>On stage</h2>
+      <div class="grid">
+        <div class="card"><h3><code>script.md</code></h3><p>The operator keeps the <strong>cue sheet</strong> at the top open — every beat says <em>▶ ADVANCE to Slide N after "…"</em>, <em>HOLD</em>, or <em>END</em>.</p></div>
+        <div class="card"><h3><code>deck/slides.html</code></h3><p>Open full screen. In the HTML lane this file <em>is</em> the deck — arrow keys / space advance, <code>f</code> is fullscreen; in the Marp lane it's the render. Review the PNGs before you present.</p></div>
+        <div class="card"><h3><code>demo-backup.mp4</code></h3><p>If the live demo dies, play this and keep talking. Live demos fail; video doesn't.</p></div>
+        <div class="card"><h3>If asked how you built it</h3><p>Say plainly: <em>"we used AI coding tools."</em> Transparency is the strategy.</p></div>
+      </div>
+
+      <h3>Rules to keep</h3>
+      <p>Deck and script are generated from the same answers — regenerate both after any change. Never ship a <code>[DRAFT]</code> line. Never hand-edit <code>.hackathon/state.json</code>. If you must skip a gate, record it with <code>--force</code>. On ambiguity, take the fastest reasonable call, <code>log</code> it, move on. And deck + script always outrank UI polish — cut UI first, never the deck.</p>
+    </section>
+
+    <footer>
+      A tutorial for the <code>hackathon</code> skill · <a class="inline" href="./plan.html">Battle Plan</a> · <a class="inline" href="./report.html">Harnessbench report</a> · <a class="inline" href="./index.html">Pack home</a>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Copy buttons
+  document.querySelectorAll('[data-copy]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.parentElement.querySelector('pre');
+      var text = pre.innerText;
+      var done = function () {
+        btn.textContent = 'copied';
+        btn.classList.add('done');
+        setTimeout(function () { btn.textContent = 'copy'; btn.classList.remove('done'); }, 1400);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, done);
+      } else {
+        var ta = document.createElement('textarea');
+        ta.value = text; document.body.appendChild(ta); ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta); done();
+      }
+    });
+  });
+
+  // Scrollspy for the TOC
+  var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a[href^="#"]'));
+  var sections = links.map(function (a) { return document.getElementById(a.getAttribute('href').slice(1)); }).filter(Boolean);
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          links.forEach(function (a) { a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id); });
+        }
+      });
+    }, { rootMargin: '-15% 0px -75% 0px', threshold: 0 });
+    sections.forEach(function (s) { io.observe(s); });
+  }
+</script>
+</body>
+</html>

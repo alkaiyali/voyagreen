@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hackathon Battle Plan — 4h · 3 people</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #09090b;
+    --ink-2: #3f3f46;
+    --muted: #71717a;
+    --faint: #a1a1aa;
+    --line: #e8e8ec;
+    --line-2: #f1f1f4;
+    --bg: #fbfbfc;
+    --card: #ffffff;
+    --accent: #5b21b6;
+    --radius: 16px;
+    --shadow-sm: 0 1px 2px rgba(9,9,11,.04), 0 1px 3px rgba(9,9,11,.03);
+    --shadow-md: 0 2px 4px rgba(9,9,11,.03), 0 8px 24px -8px rgba(9,9,11,.08);
+    --shadow-lg: 0 4px 8px rgba(9,9,11,.04), 0 24px 48px -16px rgba(9,9,11,.12);
+    --driver: #4f46e5;
+    --pitcher: #e11d48;
+    --runner: #059669;
+    --lane-w: 132px;
+    --total-w: 84px;
+  }
+  [data-theme="dark"] {
+    --ink: #fafafa; --ink-2: #d4d4d8; --muted: #a1a1aa; --faint: #71717a;
+    --line: #27272a; --line-2: #1f1f23; --bg: #09090b; --card: #131316;
+    --accent: #a78bfa;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.3);
+    --shadow-md: 0 8px 24px -8px rgba(0,0,0,.5);
+    --shadow-lg: 0 24px 48px -16px rgba(0,0,0,.6);
+    --driver: #818cf8; --pitcher: #fb7185; --runner: #34d399;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    letter-spacing: -0.011em;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(900px 500px at 12% -8%, rgba(124,58,237,.055), transparent 60%),
+      radial-gradient(700px 420px at 92% 4%, rgba(14,165,233,.045), transparent 60%);
+  }
+  [data-theme="dark"] body::before { opacity: .55; }
+  .shell { position: relative; z-index: 1; max-width: 940px; margin: 0 auto; padding: 0 24px 96px; }
+
+  /* ── top bar ─────────────────────────────── */
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 28px 0 0; }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .brand .mark { width: 22px; height: 22px; border-radius: 7px; background: linear-gradient(145deg, #7c3aed, #5b21b6); box-shadow: inset 0 1px 0 rgba(255,255,255,.25), 0 2px 6px rgba(91,33,182,.35); display: grid; place-items: center; }
+  .brand .mark svg { width: 12px; height: 12px; }
+  .top-actions { display: flex; align-items: center; gap: 10px; }
+  .toggle {
+    appearance: none; border: 1px solid var(--line); background: var(--card); color: var(--ink-2);
+    font: inherit; font-size: 13px; font-weight: 500; padding: 7px 14px; border-radius: 999px;
+    cursor: pointer; box-shadow: var(--shadow-sm); transition: transform .15s, border-color .15s;
+    text-decoration: none; white-space: nowrap;
+  }
+  .toggle:hover { transform: translateY(-1px); border-color: var(--faint); }
+  .report-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; text-decoration: none; }
+  .report-link:hover { text-decoration: none; }
+  .sec .stats { margin-top: 0; }
+
+  /* ── hero ────────────────────────────────── */
+  .hero { padding: 64px 0 52px; }
+  .eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 20px; }
+  h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); line-height: 1.02; letter-spacing: -.042em; font-weight: 700; text-wrap: balance; }
+  h1 em { font-style: normal; background: linear-gradient(100deg, #7c3aed, #2563eb); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  [data-theme="dark"] h1 em { background: linear-gradient(100deg, #a78bfa, #60a5fa); -webkit-background-clip: text; background-clip: text; }
+  .lede { margin-top: 22px; font-size: 17px; line-height: 1.65; color: var(--muted); max-width: 58ch; text-wrap: pretty; }
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; margin-top: 44px; background: var(--line); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); }
+  .stat { background: var(--card); padding: 20px 20px 18px; }
+  .stat .v { font-size: 26px; font-weight: 600; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+  .stat .k { font-size: 11.5px; font-weight: 500; letter-spacing: .07em; text-transform: uppercase; color: var(--faint); margin-top: 3px; }
+
+  /* ── sections ────────────────────────────── */
+  .sec { margin-top: 64px; }
+  .sec-head { display: flex; align-items: baseline; gap: 14px; padding-bottom: 16px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }
+  .sec-head h2 { font-size: 20px; font-weight: 600; letter-spacing: -.024em; }
+  .sec-head .kicker { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .04em; margin-left: auto; }
+
+  /* ── timeline ────────────────────────────── */
+  .tl-scroll { overflow-x: auto; padding: 0 4px 4px; }
+  .tl { min-width: 660px; position: relative; }
+  .ruler { display: grid; grid-template-columns: 132px 1fr 84px; margin-bottom: 10px; }
+  .ruler .ticks { position: relative; height: 16px; }
+  .ruler .ticks span {
+    position: absolute; transform: translateX(-50%); font-family: "JetBrains Mono", monospace;
+    font-size: 10.5px; font-weight: 500; color: var(--faint); letter-spacing: .02em;
+  }
+  .ruler .ticks span:first-child { transform: translateX(0); }
+  .ruler .ticks span:last-child { transform: translateX(-100%); }
+  .lane { display: grid; grid-template-columns: 132px 1fr 84px; align-items: center; margin-bottom: 10px; }
+  .lane-total { font-family: "JetBrains Mono", monospace; font-size: 10.5px; color: var(--muted); text-align: right; line-height: 1.35; padding-left: 12px; white-space: nowrap; }
+  .lane-total b { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-2); letter-spacing: -.01em; }
+  .lane-id { display: flex; align-items: center; gap: 9px; padding-right: 14px; }
+  .avatar { width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; font-size: 10.5px; font-weight: 700; color: #fff; letter-spacing: .02em; flex-shrink: 0; }
+  .lane-id .nm { font-size: 13.5px; font-weight: 600; letter-spacing: -.01em; }
+  .lane-id .sub { font-size: 11px; color: var(--faint); }
+  .track {
+    position: relative; height: 52px; border-radius: 12px;
+    background: var(--line-2);
+    background-image: repeating-linear-gradient(90deg, transparent 0, transparent calc(25% - 1px), var(--line) calc(25% - 1px), var(--line) 25%);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  .seg {
+    position: absolute; top: 7px; bottom: 7px; border-radius: 7px;
+    display: flex; align-items: center; padding: 0 10px; overflow: hidden;
+    font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; letter-spacing: -.005em;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 1px 3px rgba(9,9,11,.13);
+    min-width: 0;
+    transition: filter .16s ease, box-shadow .16s ease;
+  }
+  .seg > span { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+  .seg:hover { box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 6px 18px -4px rgba(9,9,11,.28); filter: saturate(1.08); z-index: 3; }
+  .seg.ghost { box-shadow: none; opacity: .5; }
+  .seg.dim { padding: 0; }
+  .s-spec    { background: linear-gradient(180deg,#a1a1aa,#87878f); }
+  .s-build   { background: linear-gradient(180deg,#6366f1,#4f46e5); }
+  .s-ui      { background: linear-gradient(180deg,#14b8a6,#0d9488); }
+  .s-deck    { background: linear-gradient(180deg,#f43f5e,#e11d48); }
+  .s-research{ background: linear-gradient(180deg,#fecdd3,#fda4af); color:#881337; }
+  .s-content { background: linear-gradient(180deg,#10b981,#059669); }
+  .s-test    { background: linear-gradient(180deg,#047857,#065f46); }
+  .s-reh     { background: linear-gradient(180deg,#f59e0b,#d97706); }
+  .s-buffer  { background: repeating-linear-gradient(135deg, var(--line-2) 0 6px, var(--line) 6px 7px); color: var(--faint); box-shadow: none; }
+  [data-theme="dark"] .s-research { background: linear-gradient(180deg,#9f1239,#881337); color: #ffe4e6; }
+  [data-theme="dark"] .s-spec { background: linear-gradient(180deg,#52525b,#3f3f46); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .legend span { display: inline-flex; align-items: center; gap: 7px; font-size: 12px; color: var(--muted); font-weight: 500; }
+  .legend i { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── timer ───────────────────────────────── */
+  .timer { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 13px 16px; margin-bottom: 24px; background: var(--card); border: 1px solid var(--line); border-radius: 12px; box-shadow: var(--shadow-sm); }
+  .timer .read { display: flex; align-items: center; gap: 10px; }
+  .timer .clock { font-family: "JetBrains Mono", monospace; font-size: 21px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -.03em; }
+  .timer .lbl { font-size: 10.5px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--faint); flex-shrink: 0; transition: background .2s; }
+  .dot.on { background: #ef4444; animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { box-shadow: 0 0 0 3px rgba(239,68,68,.16); } 50% { box-shadow: 0 0 0 7px rgba(239,68,68,.04); } }
+  .endnote { font-family: "JetBrains Mono", monospace; font-size: 11.5px; color: var(--faint); padding-left: 4px; }
+  .timer .ctrls { display: flex; align-items: flex-end; gap: 9px; flex-wrap: wrap; }
+  .field { display: grid; gap: 4px; }
+  .field span { font-size: 10px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; color: var(--faint); }
+  .field input { font-family: "JetBrains Mono", monospace; font-size: 13px; padding: 7px 10px; border-radius: 9px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 118px; }
+  .field input:focus { outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent); outline-offset: 1px; border-color: var(--accent); }
+  .btn { font: inherit; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 9px; border: 1px solid var(--line); background: var(--card); color: var(--ink-2); cursor: pointer; transition: all .15s; box-shadow: var(--shadow-sm); }
+  .btn:hover { border-color: var(--faint); }
+  .btn.primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn.primary:hover { opacity: .86; }
+  .btn.stop { background: #ef4444; border-color: #ef4444; color: #fff; }
+  .btn.stop:hover { filter: brightness(1.06); }
+
+  /* ── playhead ────────────────────────────── */
+  .now-line {
+    position: absolute; top: 0; bottom: 0; width: 2px; margin-left: -1px; background: #ef4444;
+    left: calc(var(--lane-w) + (100% - var(--lane-w) - var(--total-w)) * var(--p, 0));
+    z-index: 6; pointer-events: none; display: none;
+  }
+  .now-line.show { display: block; }
+  .now-line::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 7px; background: linear-gradient(90deg, rgba(239,68,68,.10), rgba(239,68,68,0)); }
+  .now-chip {
+    position: absolute; top: -3px; left: 50%; transform: translateX(-50%);
+    background: #ef4444; color: #fff; font-family: "JetBrains Mono", monospace;
+    font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 5px; white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(239,68,68,.4);
+  }
+
+  /* ── cards grid ──────────────────────────── */
+  .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 24px; box-shadow: var(--shadow-sm); transition: box-shadow .2s, transform .2s, border-color .2s;
+  }
+  .card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); border-color: var(--line); }
+  .card.wide { grid-column: 1 / -1; }
+  .card .cnum { font-family: "JetBrains Mono", monospace; font-size: 11px; font-weight: 600; color: var(--faint); letter-spacing: .06em; }
+  .card h3 { font-size: 16px; font-weight: 600; letter-spacing: -.02em; margin: 6px 0 12px; }
+  .card h3 .tm { font-family: "JetBrains Mono", monospace; font-size: 11.5px; font-weight: 500; color: var(--accent); background: color-mix(in srgb, var(--accent) 9%, transparent); padding: 3px 8px; border-radius: 6px; margin-left: 8px; letter-spacing: 0; vertical-align: 1px; }
+  .card ul { list-style: none; display: grid; gap: 9px; }
+  .card li { position: relative; padding-left: 18px; font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+  .card li::before { content: ""; position: absolute; left: 2px; top: .62em; width: 5px; height: 5px; border-radius: 2px; background: var(--faint); }
+  .card li strong { color: var(--ink); font-weight: 600; }
+  code { font-family: "JetBrains Mono", monospace; font-size: .88em; background: color-mix(in srgb, var(--ink) 5%, transparent); border-radius: 5px; padding: 1px 5px; }
+  .note { margin-top: 16px; padding: 12px 14px; border-radius: 10px; font-size: 12.5px; line-height: 1.55; background: color-mix(in srgb, #dc2626 5%, transparent); border: 1px solid color-mix(in srgb, #dc2626 16%, transparent); color: var(--ink-2); }
+  .note.ok { background: color-mix(in srgb, #059669 6%, transparent); border-color: color-mix(in srgb, #059669 18%, transparent); }
+  .note b { color: var(--ink); }
+
+  /* ── checklist ───────────────────────────── */
+  .progress-wrap { display: flex; align-items: center; gap: 16px; margin-bottom: 22px; }
+  .ring { width: 54px; height: 54px; flex-shrink: 0; transform: rotate(-90deg); }
+  .ring circle { fill: none; stroke-width: 5; stroke-linecap: round; }
+  .ring .bg { stroke: var(--line); }
+  .ring .fg { stroke: var(--accent); stroke-dasharray: 138.2; stroke-dashoffset: 138.2; transition: stroke-dashoffset .5s cubic-bezier(.4,0,.2,1); }
+  .progress-txt .n { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+  .progress-txt .l { font-size: 12.5px; color: var(--faint); }
+  .check { list-style: none; display: grid; gap: 8px; }
+  .check li {
+    display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; cursor: pointer;
+    background: var(--card); border: 1px solid var(--line); border-radius: 11px;
+    font-size: 13.5px; transition: background .15s, border-color .15s, transform .12s;
+    box-shadow: var(--shadow-sm);
+  }
+  .check li:hover { border-color: var(--faint); transform: translateX(2px); }
+  .check li .bx {
+    width: 19px; height: 19px; flex-shrink: 0; margin-top: 1px; border-radius: 6px;
+    border: 1.5px solid var(--faint); display: grid; place-items: center; transition: all .18s;
+  }
+  .check li .bx svg { width: 11px; height: 11px; opacity: 0; transform: scale(.6); transition: all .18s; }
+  .check li.done { background: color-mix(in srgb, var(--accent) 4%, var(--card)); border-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+  .check li.done .bx { background: var(--accent); border-color: var(--accent); }
+  .check li.done .bx svg { opacity: 1; transform: scale(1); }
+  .check li.done .lb { color: var(--faint); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--faint) 55%, transparent); }
+  .check li .lb b { color: var(--ink); font-weight: 600; }
+
+  footer { margin-top: 72px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--faint); }
+
+  @media (max-width: 720px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+    .hero { padding: 40px 0 36px; }
+    .lane, .ruler { grid-template-columns: 96px 1fr; }
+    .lane-total, .ruler .spacer { display: none; }
+    :root { --lane-w: 96px; --total-w: 0px; }
+    .tl { min-width: 560px; }
+    .timer { flex-direction: column; align-items: stretch; }
+    .timer .ctrls { justify-content: space-between; }
+  }
+  @media print {
+    body::before, .toggle { display: none; }
+    .timer .ctrls { display: none; }
+    .shell { max-width: 100%; padding: 0; }
+    .card, .check li { box-shadow: none; break-inside: avoid; }
+    .seg, .avatar, .ring .fg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .tl-scroll { overflow: visible; }
+    .tl { min-width: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="topbar">
+    <div class="brand">
+      <span class="mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></span>
+      Battle Plan
+    </div>
+    <div class="top-actions">
+      <a class="toggle" href="report.html" title="Open the full Harnessbench report">Benchmark report ↗</a>
+      <button class="toggle" id="theme-toggle">Dark</button>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="eyebrow">4-hour hackathon · 3-person team</div>
+    <h1>Four hours. Three people.<br><em>One pitch that lands.</em></h1>
+    <p class="lede">A parallel build system: spec together, split into lanes, and converge on a rehearsed two-minute demo. The deck and script are protected — they are never the thing you run out of time for.</p>
+    <div class="stats">
+      <div class="stat"><div class="v">4:00</div><div class="k">Total hours</div></div>
+      <div class="stat"><div class="v">3</div><div class="k">Parallel lanes</div></div>
+      <div class="stat"><div class="v">7</div><div class="k">Phases</div></div>
+      <div class="stat"><div class="v">2:00</div><div class="k">Max demo</div></div>
+    </div>
+  </header>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Member flows</h2><span class="kicker">0:00 → 4:00</span></div>
+    <div class="timer">
+      <div class="read">
+        <span class="dot" id="t-dot"></span>
+        <span class="clock" id="t-elapsed">0:00:00</span>
+        <span class="lbl">elapsed</span>
+        <span class="endnote" id="t-end"></span>
+      </div>
+      <div class="ctrls">
+        <label class="field"><span>Started at</span><input type="time" id="t-start" step="60" title="Set the wall-clock time the hackathon started — survives a refresh"></label>
+        <button class="btn primary" id="t-toggle">Start</button>
+        <button class="btn" id="t-reset">Reset</button>
+      </div>
+    </div>
+    <div class="tl-scroll"><div class="tl" id="tl">
+      <div class="now-line" id="now-line"><span class="now-chip" id="now-chip">0:00</span></div>
+      <div class="ruler">
+        <div></div>
+        <div class="ticks">
+          <span style="left:0%">0:00</span>
+          <span style="left:12.5%">0:30</span>
+          <span style="left:25%">1:00</span>
+          <span style="left:50%">2:00</span>
+          <span style="left:75%">3:00</span>
+          <span style="left:100%">4:00</span>
+        </div>
+        <div class="spacer"></div>
+      </div>
+
+      <div class="lane">
+        <div class="lane-id">
+          <span class="avatar" style="background:linear-gradient(145deg,#6366f1,#4338ca)">DR</span>
+          <span><span class="nm">Driver</span><br><span class="sub">owns the app</span></span>
+        </div>
+        <div class="track">
+          <div class="seg s-spec" style="left:.4%;width:5.6%" title="0:00–0:15 · all-hands spec">spec</div>
+          <div class="seg s-build" style="left:6.25%;width:50%" title="0:15–2:15 · build the demo path"><span>Build — demo path first</span></div>
+          <div class="seg s-ui" style="left:56.5%;width:12.2%" title="2:15–2:45 · UI polish">Polish UI</div>
+          <div class="seg s-deck ghost dim" style="left:68.75%;width:6.25%" title="2:45–3:00 · review the deck"></div>
+          <div class="seg s-reh" style="left:75%;width:12.5%" title="3:00–3:30 · rehearsal">Rehearse</div>
+          <div class="seg s-buffer" style="left:87.5%;width:12.5%" title="3:30–4:00 · buffer">buffer</div>
+        </div>
+        <div class="lane-total"><b>120m</b>build</div>
+      </div>
+
+      <div class="lane">
+        <div class="lane-id">
+          <span class="avatar" style="background:linear-gradient(145deg,#f43f5e,#be123c)">PI</span>
+          <span><span class="nm">Pitcher</span><br><span class="sub">owns the story</span></span>
+        </div>
+        <div class="track">
+          <div class="seg s-spec" style="left:.4%;width:5.6%" title="0:00–0:15 · all-hands spec">spec</div>
+          <div class="seg s-research" style="left:6.25%;width:12.5%" title="0:15–0:45 · gather stats & angles">research</div>
+          <div class="seg s-deck" style="left:18.75%;width:56.25%" title="0:45–3:00 · deck + script, in parallel"><span>Deck + script with the agent</span></div>
+          <div class="seg s-reh" style="left:75%;width:12.5%" title="3:00–3:30 · rehearsal">Rehearse</div>
+          <div class="seg s-buffer" style="left:87.5%;width:12.5%" title="3:30–4:00 · buffer">buffer</div>
+        </div>
+        <div class="lane-total"><b>135m</b>story</div>
+      </div>
+
+      <div class="lane">
+        <div class="lane-id">
+          <span class="avatar" style="background:linear-gradient(145deg,#10b981,#047857)">RU</span>
+          <span><span class="nm">Runner</span><br><span class="sub">owns the demo</span></span>
+        </div>
+        <div class="track">
+          <div class="seg s-spec" style="left:.4%;width:5.6%" title="0:00–0:15 · all-hands spec">spec</div>
+          <div class="seg s-content" style="left:6.25%;width:18.75%" title="0:15–1:00 · seed the demo dataset — real-looking names, rows, numbers">Seed data</div>
+          <div class="seg s-content" style="left:25%;width:12.5%" title="1:00–1:30 · stats + team names to the Pitcher for the impact slide">Facts → deck</div>
+          <div class="seg s-content" style="left:37.5%;width:18.75%" title="1:30–2:15 · hardcode fragile bits so the demo path can never error">Demo fixtures</div>
+          <div class="seg s-content" style="left:56.25%;width:12.5%" title="2:15–2:45 · screenshot every demo step — deck visuals + fallback">Screenshots</div>
+          <div class="seg s-test" style="left:68.75%;width:6.25%" title="2:45–3:00 · break the demo on purpose, log what fails">QA path</div>
+          <div class="seg s-test" style="left:75%;width:12.5%" title="3:00–3:30 · record demo-backup.mp4, then cold restart"><span>Record</span></div>
+          <div class="seg s-buffer" style="left:87.5%;width:12.5%" title="3:30–4:00 · buffer">buffer</div>
+        </div>
+        <div class="lane-total"><b>165m</b>demo</div>
+      </div>
+    </div></div>
+
+    <div class="legend">
+      <span><i style="background:linear-gradient(180deg,#6366f1,#4f46e5)"></i>Build</span>
+      <span><i style="background:linear-gradient(180deg,#14b8a6,#0d9488)"></i>UI polish</span>
+      <span><i style="background:linear-gradient(180deg,#f43f5e,#e11d48)"></i>Deck + script</span>
+      <span><i style="background:linear-gradient(180deg,#10b981,#059669)"></i>Content</span>
+      <span><i style="background:linear-gradient(180deg,#f59e0b,#d97706)"></i>Rehearse</span>
+      <span><i style="background:linear-gradient(180deg,#a1a1aa,#87878f)"></i>All hands</span>
+    </div>
+    <div class="note"><b>The rule that saves hackathons:</b> deck and script outrank UI polish — always. A rough app with a great pitch beats a great app with no pitch.</div>
+    <div class="note ok"><b>Runner is never idle:</b> seed data → facts for the deck → fixtures → screenshots → QA → <code>demo-backup.mp4</code>. Content and the clock are the job; the demo path is theirs to protect.</div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Phases</h2><span class="kicker">sequential for the driver</span></div>
+    <div class="grid">
+      <div class="card">
+        <div class="cnum">PHASE 01</div>
+        <h3>Idea<span class="tm">15 min</span></h3>
+        <ul>
+          <li><strong>Ask the user first</strong> — no idea? get it from them. The gate blocks until answers are recorded</li>
+          <li>Restate as <strong>&lt;who&gt; uses it to &lt;win&gt;, because &lt;differentiator&gt;</strong></li>
+          <li>Max three questions, and only if genuinely blocking</li>
+          <li>Pick <strong>one</strong> core feature — everything else goes to an "if time permits" list</li>
+          <li>Write the <code>HACKATHON.md</code> state file</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="cnum">PHASE 02</div>
+        <h3>Spec<span class="tm">15 min</span></h3>
+        <ul>
+          <li><code>SPEC.md</code>: pitch, core feature, <strong>three-step demo path</strong>, stack, cut list</li>
+          <li>Default stack: single-file static HTML — zero install, fastest to a demo. Vite + React only if the idea needs multiple screens, routing, or an npm-only library</li>
+          <li>Non-goals in writing: auth, deployment polish, tests beyond a smoke test</li>
+          <li><code>git init</code> and commit <code>phase: spec</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="cnum">PHASE 03</div>
+        <h3>Build<span class="tm">120 min</span></h3>
+        <ul>
+          <li>Demo path <strong>first, in order</strong> — no abstractions "for later"</li>
+          <li>A step dragging? Cut scope, log the cut, keep moving</li>
+          <li>Verify the core feature runs, then commit <code>phase: build</code></li>
+        </ul>
+        <div class="note"><b>Clock check:</b> past half the budget with no end in sight → jump to Phase 05. Deck over features.</div>
+      </div>
+      <div class="card">
+        <div class="cnum">PHASE 04</div>
+        <h3>UI polish<span class="tm">30 min</span></h3>
+        <ul>
+          <li>Real-looking <strong>seed data</strong> — never lorem ipsum on the demo path</li>
+          <li>Make the wow moment loud: one big number, one chart, one animation</li>
+          <li>Hardcode anything fragile; the demo path must never error</li>
+          <li>One accent color. No design exploration.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="cnum">PHASE 05</div>
+        <h3>Deck<span class="tm">4–5 slides</span></h3>
+        <ul>
+          <li>Title · The problem · What we built · Projected impact · What's next</li>
+          <li>Slide 04 numbers are <strong>labeled demo/projection</strong> — never presented as traction</li>
+          <li>Generated by the harness: <code>deck --init</code> (Marp <code>slides.md</code>) or <code>deck --init --html</code> (bespoke <code>slides.html</code> with the animation engine)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="cnum">PHASE 06</div>
+        <h3>Script<span class="tm">≤ 2 min</span></h3>
+        <ul>
+          <li>Beats: one slide + one sentence (≤ 12 words) + one action</li>
+          <li>Beat order mirrors the demo path; close on the wow line, verbatim</li>
+          <li>Ship a <strong>30-second version</strong> and three Q&amp;A answers</li>
+          <li>Read it back as a numbered list so the team can repeat it</li>
+        </ul>
+      </div>
+      <div class="card wide">
+        <div class="cnum">PHASE 07 · ALL HANDS</div>
+        <h3>Rehearse<span class="tm">final 30 min</span></h3>
+        <ul>
+          <li>Every beat maps to a real screen or button — fix the mismatches</li>
+          <li>Cold-restart smoke test: kill the app, start it, walk the whole demo path</li>
+          <li>Record <strong><code>demo-backup.mp4</code></strong> — live demos fail, video doesn't</li>
+          <li>Time the run-through out loud. Over two minutes? Cut the how-it-works beat first.</li>
+        </ul>
+        <div class="note ok"><b>All three present.</b> Every member must be able to say at least one beat — if the demo dies, anyone can carry it.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Run checklist</h2><span class="kicker">tap to check · saved locally</span></div>
+    <div class="progress-wrap">
+      <svg class="ring" viewBox="0 0 50 50">
+        <circle class="bg" cx="25" cy="25" r="22"></circle>
+        <circle class="fg" id="ring" cx="25" cy="25" r="22"></circle>
+      </svg>
+      <div class="progress-txt">
+        <div class="n" id="pct">0 of 7</div>
+        <div class="l" id="pct-sub">Nothing locked yet</div>
+      </div>
+    </div>
+    <ul class="check" id="checklist">
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Idea</b> — one sentence, one core feature, <code>HACKATHON.md</code> written</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Spec</b> — demo path + cut list recorded, committed</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Build</b> — app runs, core feature works, committed</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>UI</b> — seed data, loud wow moment, no errors on the demo path</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Deck</b> — <code>slides.md</code> (Marp) or a bespoke <code>slides.html</code>, 4–5 slides, reviewed in a browser</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Script</b> — two-minute beats, 30-second version, Q&amp;A, team can repeat it</span></li>
+      <li><span class="bx"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="lb"><b>Rehearse</b> — timed run-through, cold restart passed, <code>demo-backup.mp4</code> recorded</span></li>
+    </ul>
+  </section>
+
+  <section class="sec">
+    <div class="sec-head"><h2>Recovery rules</h2><span class="kicker">when it goes sideways</span></div>
+    <div class="grid">
+      <div class="card">
+        <h3>Lost your place</h3>
+        <ul>
+          <li>Read <code>HACKATHON.md</code> first, continue from <code>Next:</code></li>
+          <li>Never re-ask a question already answered in <code>SPEC.md</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Ambiguous decision</h3>
+        <ul>
+          <li>Take the fastest reasonable path, log it, keep moving</li>
+          <li>Hackathons don't wait for perfect information</li>
+        </ul>
+      </div>
+      <div class="card wide">
+        <h3>“So how did you build this?”</h3>
+        <ul>
+          <li>Answer plainly: <strong>"We used AI coding tools to build fast."</strong> Transparency is the whole strategy.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="benchmark">
+    <div class="sec-head"><h2>Pick the harness before the model</h2><span class="kicker">evidence · 140 scored runs</span></div>
+    <p class="lede" style="margin-top:0;font-size:14.5px">A companion benchmark — <b>Harnessbench</b> — ran the same prompt and pristine repo through five agent harnesses on two models. On long-horizon work the harness, not the model, is what moves the result; use this when the team picks its build tool.</p>
+    <div class="stats" style="margin-top:24px">
+      <div class="stat"><div class="v">93%</div><div class="k">Best weighted score</div></div>
+      <div class="stat"><div class="v">79%</div><div class="k">Overall pass (111/140)</div></div>
+      <div class="stat"><div class="v">5 × 2</div><div class="k">Harnesses × models</div></div>
+      <div class="stat"><div class="v">$4.10</div><div class="k">Est. total run cost</div></div>
+    </div>
+    <div class="grid" style="margin-top:16px">
+      <div class="card">
+        <div class="cnum">THE FINDING</div>
+        <h3>Harness &gt; model<span class="tm">on hard tasks</span></h3>
+        <ul>
+          <li>The same model spans <strong>0/5 to 4/5</strong> across harnesses on the five long-horizon tasks — the tool around the model decides.</li>
+          <li><strong>Easy tasks are saturated</strong>: every harness × model passes the eight routine React/Expo tasks, so they say nothing about tool choice.</li>
+          <li>Numbers are <strong>directional</strong> — n=1 per condition, timeouts folded into failure, cost under-reported on timed-out runs.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="cnum">WHAT TO DO ABOUT IT</div>
+        <h3>For this hackathon</h3>
+        <ul>
+          <li><strong>pi</strong> and <strong>opencode</strong> top the weighted ranking — pick one and commit; don't shop tooling mid-build.</li>
+          <li>The demo path is long-horizon work: budget for <strong>timeouts</strong>, not just wrong answers.</li>
+          <li>Cost tracks <strong>tokens</strong>, not wall-clock — the slower harness can be the cheaper one.</li>
+        </ul>
+        <div class="note ok"><b>Score the pair, not the model.</b> A headline number describes a harness + model together, never model quality alone.</div>
+      </div>
+    </div>
+    <a class="btn report-link" href="report.html">Open the full Harnessbench report →</a>
+  </section>
+
+  <footer>
+    <span>Generated from the <code>hackathon</code> skill · 4 hours · 3 people</span>
+    <span><a href="report.html" style="color:inherit">Harnessbench report ↗</a></span>
+    <span>Print with ⌘P / Ctrl+P and pin it to the wall</span>
+  </footer>
+
+</div>
+<script>
+  const KEY = 'hackathon-plan-v2';
+  const items = [...document.querySelectorAll('#checklist li')];
+  const ring = document.getElementById('ring');
+  const pct = document.getElementById('pct');
+  const sub = document.getElementById('pct-sub');
+  const C = 2 * Math.PI * 22;
+  const subs = ['Nothing locked yet','Idea defined','Spec written','App runs','Demo-ready','Deck done','Pitch rehearsed','Ready to win'];
+  let state = [];
+  try { state = JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { state = []; }
+
+  function render() {
+    const done = items.filter((_, i) => state[i]).length;
+    items.forEach((li, i) => li.classList.toggle('done', !!state[i]));
+    ring.style.strokeDashoffset = C * (1 - done / items.length);
+    pct.textContent = done + ' of ' + items.length;
+    sub.textContent = subs[done] || subs[0];
+  }
+  items.forEach((li, i) => li.addEventListener('click', () => {
+    state[i] = !state[i];
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    render();
+  }));
+
+  const root = document.documentElement;
+  const toggle = document.getElementById('theme-toggle');
+  try {
+    const saved = localStorage.getItem('hackathon-theme-v2');
+    if (saved) root.setAttribute('data-theme', saved);
+  } catch (e) {}
+  function paint() { toggle.textContent = root.getAttribute('data-theme') === 'dark' ? 'Light' : 'Dark'; }
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('hackathon-theme-v2', next); } catch (e) {}
+    paint();
+  });
+  paint();
+  render();
+
+  /* ── timer + playhead ─────────────────────── */
+  (function () {
+    const TKEY = 'hackathon-timer-v1';
+    const TOTAL = 240 * 60000; // 4 hours
+    const tl = document.getElementById('tl');
+    const line = document.getElementById('now-line');
+    const chip = document.getElementById('now-chip');
+    const clock = document.getElementById('t-elapsed');
+    const dot = document.getElementById('t-dot');
+    const endEl = document.getElementById('t-end');
+    const input = document.getElementById('t-start');
+    const toggle = document.getElementById('t-toggle');
+    const reset = document.getElementById('t-reset');
+
+    let st = { startedAt: null, running: false, paused: 0 };
+    try { const s = JSON.parse(localStorage.getItem(TKEY)); if (s) st = Object.assign(st, s); } catch (e) {}
+    const save = () => { try { localStorage.setItem(TKEY, JSON.stringify(st)); } catch (e) {} };
+
+    const elapsed = () => st.startedAt === null ? 0
+      : Math.max(0, st.running ? Date.now() - st.startedAt : st.paused);
+
+    function fmt(ms, short) {
+      const t = Math.floor(ms / 1000);
+      const h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), s = t % 60;
+      const p = n => String(n).padStart(2, '0');
+      return short ? h + ':' + p(m) : h + ':' + p(m) + ':' + p(s);
+    }
+
+    function paint() {
+      const e = elapsed();
+      clock.textContent = fmt(e, false);
+      dot.className = 'dot' + (st.running ? ' on' : '');
+      toggle.textContent = st.running ? 'Pause' : (st.startedAt === null ? 'Start' : 'Resume');
+      toggle.className = 'btn ' + (st.running ? 'stop' : 'primary');
+      if (st.startedAt === null) {
+        line.classList.remove('show');
+        endEl.textContent = '';
+        return;
+      }
+      line.classList.add('show');
+      tl.style.setProperty('--p', Math.max(0, Math.min(1, e / TOTAL)));
+      chip.textContent = e > TOTAL ? 'over' : fmt(e, true);
+      const d = new Date(st.startedAt + TOTAL);
+      endEl.textContent = 'ends ' + String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+
+    function applyStart() {
+      const v = input.value;
+      if (!v) return;
+      const [hh, mm] = v.split(':').map(Number);
+      const d = new Date();
+      d.setHours(hh, mm, 0, 0);
+      st.startedAt = d.getTime();
+      st.running = true;
+      st.paused = 0;
+      save(); paint();
+    }
+
+    input.addEventListener('change', applyStart);
+    input.addEventListener('keydown', ev => { if (ev.key === 'Enter') { applyStart(); input.blur(); } });
+
+    toggle.addEventListener('click', () => {
+      if (st.running) { st.paused = elapsed(); st.running = false; }
+      else {
+        if (st.startedAt === null) st.startedAt = Date.now();
+        else st.startedAt = Date.now() - st.paused;
+        st.running = true;
+      }
+      save(); paint();
+    });
+
+    reset.addEventListener('click', () => {
+      st = { startedAt: null, running: false, paused: 0 };
+      input.value = '';
+      tl.style.setProperty('--p', 0);
+      save(); paint();
+    });
+
+    if (st.startedAt !== null) {
+      const d = new Date(st.startedAt);
+      input.value = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+    }
+    setInterval(paint, 1000);
+    paint();
+  })();
+</script>
+</body>
+</html>

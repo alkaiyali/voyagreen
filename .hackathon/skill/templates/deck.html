@@ -4,10 +4,18 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title><PROJECT NAME></title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@300..700&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="light">
+<!-- Local fonts only: nothing in <head> waits on the network, so the first paint
+     is the deck — never a blank (or, in a dark browser, black) page while a font
+     CDN is slow on venue wifi. palette.css loads after the template's defaults. -->
+<style>
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Medium.woff2') format('woff2'); font-weight: 500; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Bold.woff2') format('woff2'); font-weight: 700; font-display: swap; }
+  @font-face { font-family: 'Satoshi'; src: url('assets/fonts/Satoshi-Black.woff2') format('woff2'); font-weight: 900; font-display: swap; }
+  @font-face { font-family: 'Azeret Mono'; src: url('assets/fonts/AzeretMono.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+  html { background: var(--ink, #fff); }
+</style>
 <style>
   /* ═════════════════════════════════════════════════════════════════════════
      DECK ENGINE. The file IS the presentation: no build step, no
@@ -179,6 +187,9 @@
   .person { font-size: 24px; color: var(--paper); border-left: 3px solid var(--accent); padding-left: 18px; margin-bottom: 18px; max-width: 32em; }
   .proof li strong { color: var(--paper); font-size: 30px; font-weight: 600; }
   .closing { color: var(--paper); font-weight: 600; font-size: 30px; margin-top: auto; max-width: 30em; }
+  .slide.closer { justify-content: center; }
+  .slide.closer .closing { margin-top: 0; font-size: 50px; line-height: 1.12; font-weight: 700; letter-spacing: -0.025em; max-width: 17em; }
+  .slide.closer .byline { font-family: var(--font-mono); font-size: 17px; color: var(--muted); margin-top: 28px; }
   .kicker { font-family: var(--font-mono); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; color: var(--accent-text, var(--accent)); margin-bottom: 14px; }
 
   /* ── Products / device frame ─────────────────────────────────────────────── */
@@ -269,10 +280,6 @@
   .slide.reveal { padding: 0; background: var(--ink); }
   .slide.reveal::before { display: none; }
   .slide.reveal > .reveal-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
-
-  /* ── Typing: data-anim="type" types the line out behind a caret ─────────── */
-  .caret { display: inline-block; width: .07em; height: 1.02em; margin-left: .08em; vertical-align: -0.14em;
-    background: var(--accent); animation: deck-blink 1s steps(1) infinite; }
 
   /* ── Kinetic type: data-anim="split" ────────────────────────────────────── */
   .w { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .1em; margin-bottom: -.1em; }
@@ -394,9 +401,9 @@
 
   <section class="slide cover" data-title="<PROJECT NAME>">
     <div class="hero-object ho-cover" aria-hidden="true"></div>
-    <p class="kicker" data-anim="fade"><HACKATHON> · <DATE></p>
+    <p class="kicker" data-anim="fade"><HACKATHON></p>
     <h1 data-anim="reveal"><PROJECT NAME></h1>
-    <p class="lede" data-anim="type"><one-liner: "X for Y, without Z"></p>
+    <p class="lede" data-anim="rise"><one-liner: "X for Y, without Z"></p>
     <p class="byline" data-anim="fade"><TEAM></p>
   </section>
 
@@ -460,15 +467,11 @@
     </div>
   </section>
 
-  <section class="slide" data-title="What's next" data-needs="next" data-transition="focus">
+  <section class="slide closer" data-title="<CLOSING TITLE>" data-transition="focus">
     <div class="hero-object ho-next" aria-hidden="true"></div>
-    <h2 data-anim="split">What's next</h2>
-    <ul data-anim="stagger">
-      <li><Ambitious but plausible item 1></li>
-      <li><Item 2></li>
-      <li><Item 3></li>
-    </ul>
+    <p class="kicker" data-anim="fade"><PROJECT NAME></p>
     <p class="closing" data-anim="rise"><Repeating one-liner as closing beat.></p>
+    <p class="byline" data-anim="fade"><TEAM></p>
   </section>
 
 </main>
@@ -728,23 +731,6 @@
           { clipPath: 'inset(-10% 0 -10% 0)', filter: 'blur(0)', transform: 'none' }
         ], { duration: 1150, delay: delay, easing: EASE, fill: 'both' });
         finish(el);
-        return;
-      }
-      case 'type': {
-        // typed out behind a caret, like the product's own input
-        if (el.__text == null) el.__text = el.textContent.trim();
-        var full = el.__text, n = 0, caret = document.createElement('span');
-        caret.className = 'caret'; caret.setAttribute('aria-hidden', 'true');
-        el.setAttribute('aria-label', full); el.textContent = ''; el.appendChild(caret); finish(el);
-        el.__timers = [];
-        var step = Math.max(14, Math.min(34, 1400 / Math.max(1, full.length)));
-        (function tick() {
-          el.__timers.push(setTimeout(function () {
-            n += 1; el.textContent = full.slice(0, n); el.appendChild(caret);
-            if (n < full.length) tick();
-            else el.__timers.push(setTimeout(function () { caret.remove(); }, 1600));
-          }, n ? step : delay + 250));
-        })();
         return;
       }
       case 'checklist': {

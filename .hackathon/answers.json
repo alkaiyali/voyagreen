@@ -1,12 +1,12 @@
 {
-  "at": 1790742336762,
+  "at": 1790743638273,
   "idea": "VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip. It scores a destination's tourism pressure from environmental and crowding indicators, suggests a greener alternative when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
   "demo": [
-    "Pick Boracay, set 3 days and interests: beach, food, snorkeling",
-    "See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe",
-    "Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison"
+    "Open VoyaGreen: quick onboarding, then pick beach, food and snorkeling for a 3-day trip",
+    "Tap Boracay: its tourism-pressure score is High (87), with the indicators behind it and a greener pick with the same vibe, Carabao Island",
+    "Tap Carabao Island: a 3-day itinerary built on those interests, 58 points lower pressure, saved to My trips"
   ],
   "demoProposed": false,
   "domainObject": "a leaf-shaped map pin",
@@ -42,13 +42,15 @@
     }
   ],
   "event": "",
+  "appName": "VoyaGreen",
+  "oneLiner": "",
   "next": [
     "Live tourism and environment data",
     "Booking with local operators",
     "Crowd rotation between spots"
   ],
   "impact": [],
-  "stack": "a single static HTML file with vanilla JS",
+  "stack": "React Native with Expo",
   "hours": "4 hours",
   "team": "",
   "decided": [
@@ -66,7 +68,8 @@
     "pitch30",
     "next",
     "how",
-    "hardPart"
+    "hardPart",
+    "appName"
   ],
   "sources": [
     ".hackathon/context/brief.md"

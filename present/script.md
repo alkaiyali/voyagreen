@@ -1,6 +1,6 @@
 # Demo script — voyagreen
 
-**Presenter** speaks. **Operator** advances. 4 slides, 8 beats, ~79s (197 spoken words).
+**Presenter** speaks. **Operator** advances. 4 slides, 8 beats, ~76s (189 spoken words).
 
 > Operator: keep this open on the slide deck machine. Advance only when you hear the trigger.
 
@@ -8,18 +8,18 @@
 
 | Beat | Screen | Slide title | Cue |
 |------|--------|-------------|-----|
-| 1 | Slide 1 | Voyagreen | ▶ ADVANCE to Slide 2 after "...else is already going." |
+| 1 | Slide 1 | VoyaGreen | ▶ ADVANCE to Slide 2 after "...else is already going." |
 | 2 | Slide 2 | The problem | ▶ ADVANCE to Slide 3 after "...pressure on the place" |
 | 3 | Slide 3 | What we built | ⇄ SWITCH to the app after "...show you it working" |
 | 4 | **App** | What we built | HOLD — stay on the app |
 | 5 | **App** | What we built | HOLD — stay on the app |
-| 6 | **App** | What we built | ⇄ SWITCH back to the deck, Slide 3, after "...a side-by-side pressure comparison." |
+| 6 | **App** | What we built | ⇄ SWITCH back to the deck, Slide 3, after "...saved to My trips." |
 | 7 | Slide 3 | What we built | ▶ ADVANCE to Slide 4 after "...from your own interests." |
-| 8 | Slide 4 | What's next | END — stop on this slide |
+| 8 | Slide 4 | Travel greener, not less | END — stop on this slide |
 
 ## Beats
 
-### Beat 1 · Slide 1 — Voyagreen
+### Beat 1 · Slide 1 — VoyaGreen
 **Say:** "Kyla has three days, a barkada, and one question: where do we go? Every app she opens gives her the same answer — the place everyone else is already going."
 **Do:** Stand still. Tell it like a story, not a feature list. Team name comes later, if at all.
 **Operator:** ▶ ADVANCE to Slide 2 after "...else is already going."
@@ -36,30 +36,30 @@
 
 ### Beat 4 · Slide 3 — What we built
 **Screen:** the app (the deck waits on this slide)
-**Say:** "Pick Boracay, set 3 days and interests: beach, food, snorkeling."
-**Click:** Pick Boracay, set 3 days and interests: beach, food, snorkeling
+**Say:** "Open VoyaGreen: quick onboarding, then pick beach, food and snorkeling for a 3-day trip."
+**Click:** Open VoyaGreen: quick onboarding, then pick beach, food and snorkeling for a 3-day trip
 **Operator:** HOLD — stay on the app
 
 ### Beat 5 · Slide 3 — What we built
 **Screen:** the app (the deck waits on this slide)
-**Say:** "See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe."
-**Click:** See Boracay's tourism-pressure score (High) with the indicators behind it, and a lower-pressure alternative with the same vibe
+**Say:** "Tap Boracay: its tourism-pressure score is High (87), with the indicators behind it and a greener pick with the same vibe, Carabao Island."
+**Click:** Tap Boracay: its tourism-pressure score is High (87), with the indicators behind it and a greener pick with the same vibe, Carabao Island
 **Operator:** HOLD — stay on the app
 
 ### Beat 6 · Slide 3 — What we built
 **Screen:** the app (the deck waits on this slide)
-**Say:** "And here's the moment that matters: Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison."
-**Click:** Tap the alternative: a 3-day itinerary built on those interests, with a side-by-side pressure comparison
+**Say:** "And here's the moment that matters: Tap Carabao Island: a 3-day itinerary built on those interests, 58 points lower pressure, saved to My trips."
+**Click:** Tap Carabao Island: a 3-day itinerary built on those interests, 58 points lower pressure, saved to My trips
 **Do:** Pause. Let them look at the result.
-**Operator:** ⇄ SWITCH back to the deck, Slide 3, after "...a side-by-side pressure comparison."
+**Operator:** ⇄ SWITCH back to the deck, Slide 3, after "...saved to My trips."
 
 ### Beat 7 · Slide 3 — What we built
-**Say:** "We built it with a single static HTML file with vanilla JS; the hard part was making the swap feel like the same trip: same vibe, and every day built from your own interests."
+**Say:** "We built it with React Native with Expo; the hard part was making the swap feel like the same trip: same vibe, and every day built from your own interests."
 **Do:** One line per bullet, no lingering.
 **Operator:** ▶ ADVANCE to Slide 4 after "...from your own interests."
 
-### Beat 8 · Slide 4 — What's next
-**Say:** "Next we'd add Live tourism and environment data, Booking with local operators, Crowd rotation between spots. VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less."
+### Beat 8 · Slide 4 — Travel greener, not less
+**Say:** "VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less."
 **Do:** Land the closing line. Stop talking. Do not say "thank you, any questions" — let the line hang.
 **Operator:** END — stop on this slide
 

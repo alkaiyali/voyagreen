@@ -75,10 +75,19 @@ told otherwise.
 - **`by: "user"`** — the idea itself, event, team, time budget, real proof. Only
   a person knows these.
 
-Then ask **only** `node harness.mjs ask --pending --user --json` — and of those,
-only what blocks: if the prompt has an idea, that is **zero questions**. Event,
-team and proof are not blocking; they become handoff items. If the idea itself
-is missing, ask once — see *Asking well* below.
+Then ask **only** `node harness.mjs ask --pending --user --json`, in **one**
+round, right after intake: **the teammates' names and the hackathon's name are
+always asked** (the cover and closing slides show them — never fill in a generic
+"Hackathon", never invent names), plus the idea if it is missing. Do not block on
+the answer — keep building and record it when it comes
+(`intake --team "…" --event "…"`, then regenerate deck + script). Proof is not
+asked up front; it becomes a handoff item. See *Asking well* below.
+
+- **`appName`**: the product's name exactly as it should read on the slides
+  ("VoyaGreen", not the slug's "Voyagreen"). Take it from the brief; add it to
+  `decided` if you chose it.
+- **`stack`**: a brief that says mobile / mobile-first / app gets **React
+  Native (Expo)** — see Phase notes → spec.
 
 - *`character`*: from the context if it describes a real person; otherwise a
   composite built from the context — and add `character` to `decided`.
@@ -101,8 +110,8 @@ node harness.mjs done           # advances only when the gates pass
 |---|---|
 | idea | intake (step 1) |
 | spec | refine .hackathon/SPEC.md: demo path you will actually build, **a cut list that is honest**, the domain object, accent and type lane; run `palette "<accent>"` so the app and the deck share it. When `done` passes, **launch `@deck-designer` in the background** (below) |
-| build | build the demo path in `present/app/`, in order; `smoke` until it serves |
-| ui | link `present/app/palette.css` and use its tokens (statuses on `--success`/`--warning`/`--danger`); seed real-looking data from the context; Design rules; **open `.hackathon/evidence/ui.png` and look at it** |
+| build | build the demo path in `present/app/`, in order; `smoke` until it serves (Expo: `npx expo export -p web` first) |
+| ui | link `present/app/palette.css` (Expo: import `palette.js`) and use its tokens (statuses on `--success`/`--warning`/`--danger`); seed real-looking data from the context; Design rules; **open `.hackathon/evidence/ui.png` and look at it** |
 | deck | wait for `@deck-designer`; `deck --init --force` (places the app screenshot, keeps theme.css); `deck --images`, look; `done` |
 | script | the designer already wrote it — `check script`, fix what is left, `done` |
 | rehearse | **stop** — `node harness.mjs handoff` |
@@ -246,7 +255,35 @@ detail, never to replace the user's answer with your own.
 · Demo path (3 steps, numbered) · Stack · Cut list. The demo path must be steps you
 will actually click in order — slides and script both follow it.
 
-**Stack: single-file static HTML is the default** (`index.html` + one JS file, no
+**If the brief says mobile, mobile-first, or "app", build React Native with Expo.**
+A web page in a phone frame does not meet a mobile brief — judges and mentors
+call that non-compliant. The Expo lane:
+
+```bash
+npx create-expo-app@latest present/app --template default   # Expo Router, static web output
+# delete the template's example screens/components; then
+cd present/app && npx expo install react-native-svg expo-linear-gradient
+```
+
+- **Make it feel like a real app**: a pseudo onboarding (2–3 pages with the
+  domain object as art, then a one-screen setup: name, interests, preferences —
+  no account), a tab bar (home / saved / profile), detail screens, empty states.
+  Pre-fill setup with the demo persona so the live path is one tap per step.
+- **Colours from `present/app/palette.js`** — `palette` writes it next to
+  palette.css, same tokens as the deck: `import { palette } from '../palette'`.
+  Status stays on `success` / `warning` / `danger`, never the accent.
+- **Type**: bundle the lane's fonts as assets (`useFonts`) and **render
+  without waiting for them** — a screen that returns `null` until fonts load
+  exports as an empty shell and fails the build gate.
+- **Dynamic routes need `generateStaticParams`** so every demo screen is
+  pre-rendered.
+- **The gates judge the web export**: run `npx expo export -p web` in
+  `present/app` before `smoke`, `check build`, `check ui` and `done`. The harness
+  serves `dist/` with clean URLs (`/trip/abc` → `trip/abc.html`). On the
+  projector, show that same build — it renders inside a phone frame on a wide
+  screen; on a phone, run it in Expo Go (`npx expo start`).
+
+**Otherwise, single-file static HTML is the default** (`index.html` + one JS file, no
 build step, no `npm install`). The gate serves and screenshots it with zero
 tooling, on any OS. Escalate to Vite + React only if the idea genuinely needs
 it: multiple screens with shared state, client-side routing, or an npm-only
@@ -284,7 +321,10 @@ the answers instead.
 
 The theme uses the **Lane A type pairing** (Satoshi for the whole deck, Azeret
 Mono for code) exposed as `--font-display`, `--font-body` and `--font-mono`,
-imported from Fontshare / Google Fonts so the render is not the system font.
+bundled with the skill and copied to `present/deck/assets/fonts/` by `deck --init`
+— the deck loads **nothing** from the network, so the first paint is the cover,
+never a blank (or, in a dark-mode browser, black) page while a font CDN crawls
+on venue wifi.
 Swap those tokens only within a vetted lane — see the Design rules.
 **Light first, like product motion design.** The deck is light by default — a
 projector in a lit room washes dark slides to grey, dark type on white
@@ -301,9 +341,10 @@ arrives — while the atmosphere surges underneath. The house transition is
 new one pulls in); `zoom` pushes the camera into the problem; **one** `sweep`
 (bars of the brand colour) is the showpiece, landing on the **flood** slide —
 Impact, full-bleed brand colour, the big number as huge type. On the slides:
-the title **reveals** (wipes on, sharpens, settles), the one-liner **types**
-behind a caret, and the demo steps sit in a card whose spinners **tick to
-checks** one by one (`data-anim="reveal|type|checklist"`). Slide titles roll
+the title **reveals** (wipes on, sharpens, settles), the one-liner **rises**
+in, and the demo steps sit in a card whose spinners **tick to
+checks** one by one (`data-anim="reveal|rise|checklist"`). No typewriter
+effect — a line the room has to wait for is a line they stop reading. Slide titles roll
 like an odometer and headings rise in word by word (`data-anim="split"`). The
 **hero object** — the domain object, set once in `theme.css` as `--object` —
 sits on every slide at a different crop and scale and glides between them. One
@@ -335,12 +376,17 @@ for it). Before that, the slide simply has no screenshot — never an empty fram
 `@image-scout` is **optional** and bounded (one inline SVG on one named slide,
 8 tool calls); do not run it in autopilot.
 
-`--init` fills the template from `.hackathon/answers.json`: title, one-liner,
-team, event, the problem headline and bullets, the 3-step demo TOC, the
+`--init` fills the template from `.hackathon/answers.json`: title (`appName`,
+exact casing — else the slug), one-liner (`oneLiner`, else the idea's first
+sentence), the problem headline and bullets, the 3-step demo TOC, the
 how-it-works diagram from your core feature, the stack, the impact table, and
-what's next. **It never invents content** — elements with no recorded data are
-dropped and the slides that would be hollow (impact, what's next) are removed
-entirely. It prints what you skipped, so you can go sharpen it.
+the **closing slide** — the closer as big type, titled with its tagline, over the
+team's names. There is no "What's next" slide: `next` feeds the Q&A, not the
+deck. **The cover shows the event name above the title and the teammates'
+names below it — only as the team gave them.** No event recorded → no kicker;
+never a generic "Hackathon · <month>". **It never invents content** — elements
+with no recorded data are dropped and the slides that would be hollow (impact)
+are removed entirely. It prints what you skipped, so you can go sharpen it.
 
 The **Impact** slide holds two kinds of number, kept visibly apart: **measured
 proof** the team gathered (`--proof "23 of 30 students we asked … | hallway poll,

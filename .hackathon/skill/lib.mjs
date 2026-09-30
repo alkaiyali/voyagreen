@@ -188,7 +188,7 @@ export function walk(dir, filter, acc = [], depth = 0) {
   let entries;
   try { entries = fs.readdirSync(dir, { withFileTypes: true }); } catch { return acc; }
   for (const e of entries) {
-    if (/^(node_modules|\.git|\.hackathon|dist|build|\.next|coverage|venv|__pycache__)$/.test(e.name)) continue;
+    if (/^(node_modules|\.git|\.hackathon|\.expo|dist|build|ios|android|\.next|coverage|venv|__pycache__)$/.test(e.name)) continue;
     const p = path.join(dir, e.name);
     if (e.isDirectory()) walk(p, filter, acc, depth + 1);
     else if (filter(e.name)) acc.push(p);
@@ -222,12 +222,21 @@ export async function pickPort(hints) {
 // python is `python` on Windows and `python3` almost everywhere else
 const PY = isWin ? 'python' : 'python3';
 
+const SERVE_STATIC = path.join(path.dirname(fileURLToPath(import.meta.url)), 'scripts', 'serve-static.mjs');
+
 export function detectStart(proj) {
   const pkg = readIf(path.join(proj, 'package.json'));
   if (pkg) {
     try {
       const j = JSON.parse(pkg);
       const s = j.scripts || {};
+      // Expo / React Native: the gates judge the web export (`npx expo export -p web`),
+      // served statically — a Metro dev server is too slow and ships an empty shell.
+      if ((j.dependencies || {}).expo) {
+        if (exists(path.join(proj, 'dist', 'index.html')))
+          return { cmd: `node "${SERVE_STATIC}" dist {PORT}`, portHint: 8081, how: 'Expo web export (dist/)' };
+        return { cmd: null, why: 'Expo app has no web export yet — run: cd present/app && npx expo export -p web', how: 'expo' };
+      }
       if (s.dev) return { cmd: 'npm run dev', portHint: 5173, how: 'package.json dev script' };
       if (s.start) return { cmd: 'npm start', portHint: 3000, how: 'package.json start script' };
     } catch { /* fall through to file checks */ }
@@ -290,6 +299,7 @@ export async function startApp({ proj, evid, cfg = {} }) {
   if (!spec) {
     return { ok: false, why: 'no runnable app found (need package.json, index.html, app.py or main.py)' };
   }
+  if (!spec.cmd) return { ok: false, why: spec.why };
 
   fs.mkdirSync(evid, { recursive: true });
   const port = await pickPort([spec.portHint, cfg.PORT, 5173, 3000, 8080, 8000, 5000, 4173, 4321]);

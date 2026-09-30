@@ -258,7 +258,7 @@ const QUESTIONS = [
     id: 'stack', header: 'Stack', type: 'select', required: false,
     question: 'Any preference for the stack? (single-file static HTML is the default — zero install, fastest to a demo)',
     why: 'how the build gate starts your app',
-    options: ['single-file static HTML (recommended)', 'decide for me', 'Vite + React', 'Vite + Svelte', 'Next.js', 'Python (FastAPI / Flask)'],
+    options: ['single-file static HTML (recommended)', 'React Native (Expo) — the brief asks for a mobile app', 'decide for me', 'Vite + React', 'Vite + Svelte', 'Next.js', 'Python (FastAPI / Flask)'],
   },
   {
     id: 'hours', header: 'Time budget', type: 'select', required: false,
@@ -308,8 +308,8 @@ const QUESTIONS = [
   },
   {
     id: 'event', header: 'Event', type: 'text', required: false,
-    question: 'Which hackathon is this? (shown on the title slide)',
-    why: 'the title slide',
+    question: 'What is the hackathon called? (shown on the cover — e.g. "DevCon Kids Hackathon 2026")',
+    why: 'the cover kicker — without it the cover names no event',
   },
   {
     id: 'next', header: "What's next", type: 'text', required: false,
@@ -318,8 +318,8 @@ const QUESTIONS = [
   },
   {
     id: 'team', header: 'Team', type: 'text', required: false,
-    question: "Who's on the team, and any role preferences? (driver / pitcher / runner)",
-    why: 'the team line and HACKATHON.md roles',
+    question: "Your teammates' names, as they should appear on the slides (comma-separated; roles in brackets if you like — driver / pitcher / runner)",
+    why: 'the byline on the cover and closing slides, and HACKATHON.md roles',
   },
 ];
 
@@ -376,7 +376,8 @@ const RECOMMEND = {
   qa: null,
   proof: 'a 20-minute poll of real people is the most persuasive number you can have',
   closer: 'without it the last line is generated and the script gate will block',
-  next: 'without it (and no impact numbers) the deck can drop below 4 slides',
+  team: 'the cover and closing slides show your names — ask for them, never invent them',
+  event: 'the cover names the event — ask for it, never fill in a generic "Hackathon"',
 };
 
 // The open questions an AI interviewer should ask next, given what is recorded.
@@ -484,6 +485,19 @@ function cmdAsk(args) {
   return 0;
 }
 
+// "a; b; c", "1. a 2. b", "a → b → c" or one per line -> [a, b, c]. Commas split only
+// when nothing else does, and never for the demo path (its steps contain commas).
+function toList(v, key = '') {
+  if (Array.isArray(v)) return v.map(x => String(x).trim()).filter(Boolean);
+  const t = String(v || '').trim();
+  if (!t) return [];
+  const numbered = t.split(/\s*(?:^|\s)\d+[.)]\s+/).map(x => x.trim()).filter(Boolean);
+  if (numbered.length > 1) return numbered.map(x => x.replace(/[;,]\s*$/, ''));
+  const strong = t.split(/\s*(?:;|\n|→|->)\s*/).filter(Boolean);
+  if (strong.length > 1 || key === 'demo') return strong;
+  return t.split(/\s*,\s*/).filter(Boolean);
+}
+
 // Accept answers from a JSON file, inline JSON, or flags. Writes the intake
 // record and scaffolds HACKATHON.md + SPEC.md from the user's own words.
 function cmdIntake(args) {
@@ -503,7 +517,7 @@ function cmdIntake(args) {
       const val = args[++i];
       if (val === undefined) die(`${k} needs a value`);
       if (['demo', 'painPoints', 'next'].includes(key)) {
-        a[key] = Array.isArray(val) ? val : String(val).split(/\s*(?:→|->|;|\n|,)\s*/).filter(Boolean);
+        a[key] = toList(val, key);
       } else if (key === 'qa') {
         a.qa = [...(a.qa || []), ...parseQa(val)];
       } else if (key === 'impact') {
@@ -522,11 +536,19 @@ function cmdIntake(args) {
 
   // Merge over anything already recorded, so an agent that re-asks only the
   // weak answers (ask --pending) does not wipe the rest. `--fresh` opts out.
+  // Provenance lists (decided, sources) accumulate instead of being replaced.
   const answersFile = path.join(STATE_DIR, 'answers.json');
   const hadAnswers = fs.existsSync(answersFile);
   if (!args.includes('--fresh') && hadAnswers) {
-    try { a = Object.assign({}, JSON.parse(readIf(answersFile)), a); } catch { /* keep a */ }
+    try {
+      const old = JSON.parse(readIf(answersFile));
+      const union = k => [...new Set([...(old[k] || []), ...toList(a[k] ?? [])])];
+      const decided = union('decided'), sources = union('sources');
+      a = Object.assign({}, old, a, { decided, sources });
+    } catch { /* keep a */ }
   }
+  // List answers may arrive as one string from a JSON file too — never drop them silently.
+  for (const k of ['demo', 'painPoints', 'next', 'decided', 'sources']) if (a[k] != null) a[k] = toList(a[k], k);
 
   const report = args.includes('--report');
   // In report mode stdout is the JSON contract; the human prose goes nowhere,
@@ -575,6 +597,10 @@ function cmdIntake(args) {
     pitch30: String(a.pitch30 || '').trim(),
     qa: parseQa(a.qa || []).slice(0, 4),
     event: String(a.event || '').trim(),
+    // the product's name exactly as written on the slides ("VoyaGreen"), and an
+    // optional short one-liner for the cover (else the idea's first sentence)
+    appName: String(a.appName || '').trim(),
+    oneLiner: String(a.oneLiner || '').trim(),
     next: (Array.isArray(a.next) ? a.next : []).filter(Boolean).slice(0, 3),
     impact: Array.isArray(a.impact) ? a.impact.slice(0, 2) : [],
     stack: a.stack || 'decide for me',
@@ -659,21 +685,23 @@ async function cmdPalette(args) {
   requireInit();
   const accent = args.find(a => !a.startsWith('--'));
   if (!accent) die('usage: harness.mjs palette <#accent> [--dark]   e.g. palette "#E8A33D"   (light is the default — projectors)');
-  const { generatePalette, checks, renderCss } = await import(pathToFileURL(path.join(SKILL_DIR, 'scripts', 'palette.mjs')).href);
+  const { generatePalette, checks, renderCss, renderJs } = await import(pathToFileURL(path.join(SKILL_DIR, 'scripts', 'palette.mjs')).href);
   let p;
   try { p = generatePalette(accent, { mode: args.includes('--dark') ? 'dark' : 'light' }); } catch (e) { die(e.message); }
   const css = renderCss(p);
   fs.mkdirSync(L.app, { recursive: true });
   fs.writeFileSync(path.join(L.app, 'palette.css'), css);
+  fs.writeFileSync(path.join(L.app, 'palette.js'), renderJs(css));
   fs.mkdirSync(L.deck, { recursive: true });
   fs.writeFileSync(path.join(L.deck, 'palette.css'), css);
   const t = p.tokens;
-  console.log(`${green('✓')} present/app/palette.css + present/deck/palette.css — ${p.mode}, accent ${t.accent}${t.accentText !== t.accent ? dim(` · accent-coloured text uses --accent-text ${t.accentText} to stay readable`) : ''}`);
+  console.log(`${green('✓')} present/app/palette.css + palette.js + present/deck/palette.css — ${p.mode}, accent ${t.accent}${t.accentText !== t.accent ? dim(` · accent-coloured text uses --accent-text ${t.accentText} to stay readable`) : ''}`);
   console.log(dim(`  neutrals ${p.warm ? 'cool slate (the accent is warm — warm on warm reads as mud)' : 'tinted toward the accent'}`));
   for (const r of checks(p)) console.log(`  ${r.ok ? green('✓') : red('✗')} ${r.name.padEnd(20)} ${r.ratio.toFixed(2)}:1 ${dim(`(AA ${r.min})`)}`);
   for (const c of p.clashes) console.log(yellow(`  ! ${c}`));
   console.log('');
   console.log(`  ${bold('app')}   <link rel="stylesheet" href="palette.css"> before your own CSS; use var(--bg), var(--text); var(--accent) for fills, var(--accent-text) for accent-coloured text`);
+  console.log(`  ${bold('native')} React Native / Expo: import { palette } from './palette' (palette.bg, palette.accent, palette.successBg…)`);
   console.log(`  ${bold('deck')}  already linked — theme.css must not redefine these tokens`);
   console.log(`  ${bold('svg')}   inline SVGs cannot read CSS variables — use these hexes: accent ${t.accent} · ${[300, 500, 700, 900].map(k => `${k} ${t.ramp[k]}`).join(' · ')} · surface ${t.surface}`);
   logEvent('palette', load().phase, `accent=${t.accent} mode=${p.mode}`);
@@ -1233,6 +1261,7 @@ async function cmdDeck(args) {
       if (fs.existsSync(ui)) { fs.mkdirSync(path.dirname(app), { recursive: true }); fs.copyFileSync(ui, app); }
       const shot = fs.existsSync(app);
       const reveal = fs.existsSync(path.join(L.deck, 'assets', 'reveal.mp4'));
+      mod.installDeckFonts(L.deck);
       fs.writeFileSync(out, mod.generateDeck({ answers, name: s.name, shot, reveal }));
       console.log(`  ${green('✓')} generated present/deck/slides.html from .hackathon/answers.json`);
       console.log(shot ? `  ${green('✓')} app screenshot placed on "What we built" (present/deck/assets/app.png)`

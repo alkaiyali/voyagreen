@@ -51,7 +51,7 @@ beat. Read the hackathon skill's SKILL.md (Pitch rules, Design rules) first.
    wash dark slides out. **Motion:** keep the template's choreography — `focus`
    as the house transition, **one** `sweep` landing on the `flood` Impact slide
    (the big number as huge type on the brand colour), the title `reveal`, the
-   typed one-liner and the ticking steps card. Titles roll and the hero travels
+   rising one-liner and the ticking steps card. Titles roll and the hero travels
    automatically. Do not give every slide a different transition; one language
    plus one showpiece reads as a film.
 5. **Look at it.** `node harness.mjs deck --images`, then open every

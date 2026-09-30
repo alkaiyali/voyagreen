@@ -46,9 +46,12 @@ export default async function gate({ proj, evid, cfg }) {
   // clears WCAG AA on the background it sits on.
   const pal = readIf(path.join(L.app, 'palette.css'));
   const cssSrc = src.filter(f => /\.(html|css)$/.test(f) && path.basename(f) !== 'palette.css').map(f => readIf(f) || '');
-  const linksPalette = cssSrc.some(t => /palette\.css/.test(t));
+  // React Native / Expo cannot read CSS: it imports the same tokens from palette.js.
+  const importsPalette = src.filter(f => /\.(js|jsx|ts|tsx)$/.test(f) && !/palette\.js$/.test(f))
+    .some(f => /from\s+['"][^'"]*\/palette(\.js)?['"]/.test(readIf(f) || ''));
+  const linksPalette = cssSrc.some(t => /palette\.css/.test(t)) || importsPalette;
   if (!pal) warn.push('no palette.css — run: node harness.mjs palette "#<accent>"  (the app and the deck then share one palette)');
-  else if (!linksPalette) warn.push('palette.css exists but the app never links it — <link rel="stylesheet" href="palette.css"> before your own CSS');
+  else if (!linksPalette) warn.push('palette.css exists but the app never uses it — <link rel="stylesheet" href="palette.css"> (web) or import { palette } from "./palette" (React Native)');
   else pass.push('app uses the shared palette.css');
   const appTokens = readTokens(linksPalette ? pal : '', ...cssSrc);
   if (isDarkTheme(appTokens)) warn.push('the app is dark — a projector in a lit room washes dark themes to grey. Light is the default: node harness.mjs palette "<accent>" (only use --dark for a dark room)');
