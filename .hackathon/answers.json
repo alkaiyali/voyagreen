@@ -1,5 +1,5 @@
 {
-  "at": 1790751832328,
+  "at": 1790754134426,
   "idea": "VoyaGreen finds travelers a lower-pressure place with the same vibe, then plans the trip. It scores a destination's tourism pressure from environmental and crowding indicators, suggests a greener alternative when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
@@ -10,14 +10,14 @@
   ],
   "demoProposed": false,
   "domainObject": "a leaf-shaped map pin",
-  "pain": "Every traveler gets sent to the same few famous spots, so those places get overcrowded and strained, and nobody sees the pressure their choice adds.",
+  "pain": "Every app still sends everyone to the same few famous spots, and nobody sees the pressure their choice adds.",
   "painPoints": [
-    "Recommendations rank by popularity, price and distance, never by the pressure on the place",
-    "Sustainability data exists but is scattered, and nobody checks it before choosing a trip",
-    "Lesser-known places with the same vibe stay invisible"
+    "Apps rank places by popularity, price and distance, never by how crowded or strained they are",
+    "The sustainability data exists, but it's scattered and nobody checks it before picking a trip",
+    "Places with the same vibe and a fraction of the crowd stay invisible"
   ],
-  "hook": "Kyla has three days, a barkada, and one question: where do we go? Every app she opens gives her the same answer — the place everyone else is already going.",
-  "character": "Kyla, a college student in Quezon City planning her barkada's summer trip, who books Boracay because it is the first thing every TikTok and travel site shows her",
+  "hook": "Every summer, every barkada group chat has the same question: where do we go?",
+  "character": "Kyla (an example traveler), a college student planning her barkada's summer trip, whose group chat lands on Boracay because it's all over their TikTok",
   "closer": "VoyaGreen won't tell you to stay home. It shows you somewhere just as good that the crowd hasn't found. Travel greener, not less.",
   "proof": [],
   "how": "Pick a place, your days and your interests. VoyaGreen scores its tourism pressure, shows the indicators behind it, and if it's High, swaps in a same-vibe place and builds your itinerary there.",
@@ -52,7 +52,7 @@
   "impact": [],
   "stack": "React Native with Expo",
   "hours": "4 hours",
-  "team": "",
+  "team": "Jared Bravo, Manel Flora, Abdulgafhar Alkaiyali",
   "decided": [
     "who",
     "core",

@@ -50,6 +50,31 @@ export function installDeckFonts(deckDir) {
   for (const f of fs.readdirSync(src)) fs.copyFileSync(path.join(src, f), path.join(dst, f));
 }
 
+// Logos (school / org / sponsor) live in resources/logos/ — the skill's own,
+// then the project's (same filename overrides). ALWAYS checked: every one
+// found is copied to deck/assets/logos/ and shown on the cover.
+const LOGO_EXT = /\.(png|jpe?g|svg|webp)$/i;
+export function findLogos(projDir) {
+  const dirs = [path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'resources', 'logos')];
+  if (projDir) dirs.push(path.join(projDir, 'resources', 'logos'));
+  const byName = new Map();
+  for (const d of dirs) {
+    if (!fs.existsSync(d)) continue;
+    for (const f of fs.readdirSync(d).sort()) if (LOGO_EXT.test(f)) byName.set(f, path.join(d, f));
+  }
+  return [...byName.entries()].map(([name, src]) => ({ name, src }));
+}
+export function installLogos(deckDir, projDir) {
+  const logos = findLogos(projDir);
+  if (!logos.length) return [];
+  const dst = path.join(deckDir, 'assets', 'logos');
+  fs.mkdirSync(dst, { recursive: true });
+  for (const l of logos) fs.copyFileSync(l.src, path.join(dst, l.name));
+  return logos.map(l => `assets/logos/${l.name}`);
+}
+const logoAlt = (p) => path.basename(p).replace(LOGO_EXT, '').replace(/[-_]+/g, ' ');
+const logoTags = (logos) => (logos || []).map(p => `<img src="${p}" alt="${logoAlt(p)}">`).join('');
+
 // "voicetasks" -> "Voicetasks", "voice-tasks" -> "Voice Tasks", "IRCite" left alone
 const titleCase = (s) => {
   const t = String(s || '').trim();
@@ -138,9 +163,10 @@ function dropSection(html, key) {
 // Fill templates/deck.html from the answers. Produces a finished,
 // self-contained deck — no build step, because the file is the presentation.
 // Hollow slides (no impact data, no next steps) are removed rather than faked.
-export function generateDeck({ answers, name, date = new Date(), shot = false, reveal = false }) {
+export function generateDeck({ answers, name, date = new Date(), shot = false, reveal = false, logos = [] }) {
   const a = answers || {};
   const { impact, proof, next, subs } = buildSubs(a, name, date);
+  subs.push(['<LOGOS>', logoTags(logos)]);
 
   const templatePath = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'templates', 'deck.html');
   let template = readIf(templatePath);
@@ -151,6 +177,7 @@ export function generateDeck({ answers, name, date = new Date(), shot = false, r
   if (!shot) template = dropSection(template, 'shot');   // no screenshot yet: no empty frame
   if (!reveal) template = dropSection(template, 'reveal'); // no motion piece: no reveal slide
   if (!next.length) template = dropSection(template, 'next');
+  if (!logos.length) template = dropSection(template, 'logos');
 
   const impactState = { row: 0 };
   template = template.split('\n')
@@ -192,7 +219,8 @@ if (process.argv[1]?.endsWith('gen-deck.mjs')) {
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const assets = path.join(layout(proj).deck, 'assets');
   installDeckFonts(layout(proj).deck);
-  fs.writeFileSync(out, generateDeck({ answers, name: state.name, shot: fs.existsSync(path.join(assets, 'app.png')), reveal: fs.existsSync(path.join(assets, 'reveal.mp4')) }));
+  const logos = installLogos(layout(proj).deck, proj);
+  fs.writeFileSync(out, generateDeck({ answers, name: state.name, shot: fs.existsSync(path.join(assets, 'app.png')), reveal: fs.existsSync(path.join(assets, 'reveal.mp4')), logos }));
   console.log(`gen-deck: wrote ${path.relative(proj, out)}`);
   process.exit(0);
 }

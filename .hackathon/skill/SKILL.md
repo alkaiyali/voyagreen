@@ -36,10 +36,26 @@ until it is real.
     ├── answers.json (recorded) · intake.json (your draft) · state · log · evidence/
     ├── context/    the user's notes and briefs
     └── skill/      this project's own copy of the hackathon skill
+                    (incl. resources/logos/ — the school logo for the cover)
 ```
 
 (`.claude/` and `.opencode/` sit at the root too — hidden, and only because
 those tools look there: a link to `.hackathon/skill` and the two subagents.)
+
+## The cover: school logo + team names — every deck, no exceptions
+
+**Always check `resources/logos/` before building the deck.** This skill ships
+the team's school logo there — `resources/logos/wesschoollogo.png` (Wesleyan
+University-Philippines) — and a project may add more in
+`<project>/resources/logos/` (same filename overrides). `deck --init` copies
+every logo it finds to `present/deck/assets/logos/` and puts them on the
+**first slide**, above the title. The deck gate **fails** if a logo in either
+folder is missing from the cover — including on a hand-edited deck, where you add
+`<div class="logos"><img src="assets/logos/wesschoollogo.png" alt="…"></div>` yourself.
+
+**The cover also names every team member** (`intake --team "Ana Cruz, Ben Reyes"`).
+Names are human-only: if none are recorded, **ask the team for them** before the
+deck phase ends — never invent or leave them out silently.
 
 **Never write a file to the project root** other than those two. Scaffold the
 app inside `present/app/` (e.g. `npm create vite@latest present/app`), keep
@@ -382,8 +398,9 @@ sentence), the problem headline and bullets, the 3-step demo TOC, the
 how-it-works diagram from your core feature, the stack, the impact table, and
 the **closing slide** — the closer as big type, titled with its tagline, over the
 team's names. There is no "What's next" slide: `next` feeds the Q&A, not the
-deck. **The cover shows the event name above the title and the teammates'
-names below it — only as the team gave them.** No event recorded → no kicker;
+deck. **The cover shows the logos from `resources/logos/` at the top, the event
+name above the title and the teammates' names below it — only as the team gave
+them.** No event recorded → no kicker;
 never a generic "Hackathon · <month>". **It never invents content** — elements
 with no recorded data are dropped and the slides that would be hollow (impact)
 are removed entirely. It prints what you skipped, so you can go sharpen it.

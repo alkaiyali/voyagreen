@@ -35,7 +35,7 @@ import { red, green, yellow, dim, bold, blue, run, startApp, readIf, isWin, OPEN
 const SKILL_DIR = path.dirname(fileURLToPath(import.meta.url));
 // What a project's copy of the skill contains. The skill's own folder can hold
 // other things (a website, .git), so copies are whitelisted, never wholesale.
-const SKILL_FILES = ['SKILL.md', 'harness.mjs', 'lib.mjs', 'checks', 'scripts', 'templates'];
+const SKILL_FILES = ['SKILL.md', 'harness.mjs', 'lib.mjs', 'checks', 'scripts', 'templates', 'resources'];
 const ENTRY = `// Project entry point — pure Node, identical on Windows / macOS / Linux.\n// Run from this directory: node harness.mjs <command>\nimport './.hackathon/skill/harness.mjs';\n`;
 function copySkill(dest) {
   fs.mkdirSync(dest, { recursive: true });
@@ -1262,13 +1262,18 @@ async function cmdDeck(args) {
       const shot = fs.existsSync(app);
       const reveal = fs.existsSync(path.join(L.deck, 'assets', 'reveal.mp4'));
       mod.installDeckFonts(L.deck);
-      fs.writeFileSync(out, mod.generateDeck({ answers, name: s.name, shot, reveal }));
+      // logos: ALWAYS check the skill's resources/logos/ (and the project's) and put them on the cover
+      const logos = mod.installLogos(L.deck, PROJ);
+      fs.writeFileSync(out, mod.generateDeck({ answers, name: s.name, shot, reveal, logos }));
       console.log(`  ${green('✓')} generated present/deck/slides.html from .hackathon/answers.json`);
       console.log(shot ? `  ${green('✓')} app screenshot placed on "What we built" (present/deck/assets/app.png)`
         : dim('      no app screenshot yet — it is placed automatically once the ui gate captures one (rerun deck --init --force)'));
+      console.log(logos.length ? `  ${green('✓')} logo(s) on the cover: ${logos.map(l => path.basename(l)).join(', ')} (from resources/logos/)`
+        : dim('      no logos — put school / org logos in resources/logos/ and rerun to show them on the cover'));
       console.log(reveal ? `  ${green('✓')} reveal slide after the problem plays present/deck/assets/reveal.mp4, then advances itself`
         : dim('      no reveal slide — drop a ~10 s motion piece at present/deck/assets/reveal.mp4 and rerun to add one after the problem'));
       const missing = [];
+      if (!String(answers.team || '').trim()) missing.push('team  (no member names on the cover — ask the team: intake --team "Ana Cruz, Ben Reyes")');
       if (!answers.pain) missing.push('pain  (the problem slide has no headline)');
       if (!(answers.painPoints || []).length) missing.push('painPoints  (no supporting bullets)');
       if (!answers.character) missing.push('character  (no named person on the problem slide — the opening is a statement, not a story)');

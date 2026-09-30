@@ -181,6 +181,9 @@
   .cover h1 .tint { color: var(--accent); }
   .cover .lede { color: var(--muted); font-size: 27px; max-width: 22em; }
   .cover .byline { font-family: var(--font-mono); font-size: 17px; color: var(--muted); letter-spacing: .02em; }
+  .cover .byline { font-size: 20px; color: var(--paper); margin-top: 18px; }
+  .cover .logos { display: flex; align-items: center; gap: 20px; margin-bottom: 26px; }
+  .cover .logos img { height: 84px; width: auto; object-fit: contain; }
 
   .statement { font-size: 31px; color: var(--paper); max-width: 28em; }
   .note { color: var(--muted); font-size: 20px; }
@@ -401,6 +404,9 @@
 
   <section class="slide cover" data-title="<PROJECT NAME>">
     <div class="hero-object ho-cover" aria-hidden="true"></div>
+    <!-- logos: every file in the skill's resources/logos/ (plus the project's),
+         copied to assets/logos/ by deck --init. ALWAYS on the cover. -->
+    <div class="logos" data-needs="logos" data-anim="fade"><LOGOS></div>
     <p class="kicker" data-anim="fade"><HACKATHON></p>
     <h1 data-anim="reveal"><PROJECT NAME></h1>
     <p class="lede" data-anim="rise"><one-liner: "X for Y, without Z"></p>

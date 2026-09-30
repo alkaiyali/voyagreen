@@ -22,6 +22,10 @@ beat. Read the hackathon skill's SKILL.md (Pitch rules, Design rules) first.
 
 1. **Read** `.hackathon/SPEC.md` (domain object, accent, type lane), `.hackathon/answers.json`,
    and everything in `.hackathon/context/`.
+   **Always check `.hackathon/skill/resources/logos/` and `resources/logos/`** — every logo
+   there (the school logo, `wesschoollogo.png`) goes on the cover slide, and the cover
+   names every team member. `deck --init` does both; the deck gate fails without the logos.
+   No team names recorded → report it back as a question for the team, never invent them.
 2. **Prose first.** Run `node harness.mjs ask --pending --json`. For every prose
    field that is missing or thin, write it from the context under the Pitch rules
    — open on a named person, end on the impact plus a tagline, 3 hard questions

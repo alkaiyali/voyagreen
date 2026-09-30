@@ -9,6 +9,7 @@
     "userInterfaceStyle": "light",
     "ios": {},
     "android": {
+      "package": "com.voyagreen.app",
       "adaptiveIcon": {
         "backgroundColor": "#E5FAFE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",

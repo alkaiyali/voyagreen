@@ -7,6 +7,7 @@ import path from 'node:path';
 import { readIf, exists, placeholders, designTells, deckSlides, deckText, cutList, cutClaims, layout } from '../lib.mjs';
 import { buildDeck } from '../scripts/build-deck.mjs';
 import { readTokens, tokenFailures, isDarkTheme } from '../scripts/palette.mjs';
+import { findLogos } from '../scripts/gen-deck.mjs';
 
 export default function gate({ proj }) {
   const pass = [], fail = [], warn = [];
@@ -66,6 +67,17 @@ export default function gate({ proj }) {
   } else {
     pass.push(`${slides.length} slides`);
   }
+
+  // The cover carries every logo in resources/logos/ (skill's + project's) and the team's names.
+  const cover = slides[0]?.body || '';
+  const logos = findLogos(proj);
+  const offCover = logos.filter(l => !cover.includes(`assets/logos/${l.name}`) || !exists(path.join(deckDir, 'assets', 'logos', l.name)));
+  if (offCover.length) {
+    fail.push(`logo(s) in resources/logos/ missing from the cover: ${offCover.map(l => l.name).join(', ')}`);
+    fail.push('    run: node harness.mjs deck --init --force  (or add <div class="logos"><img src="assets/logos/…"></div> to the cover by hand)');
+  } else if (logos.length) pass.push(`cover shows ${logos.length} logo(s) from resources/logos/`);
+  if (!/class="byline"/.test(cover)) warn.push('the cover has no team names — node harness.mjs intake --team "Ana Cruz, Ben Reyes", then deck --init --force');
+  else pass.push('cover names the team');
 
   const text = deckText(src);
   for (const topic of ['problem', 'what we built', 'next']) {
