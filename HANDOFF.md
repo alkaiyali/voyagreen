@@ -14,7 +14,7 @@ Phase **rehearse** (7/7).
    _real local proof beats any statistic — and it must not be invented_
 2. Add event and team for the title slide: node harness.mjs intake --event "…" --team "…", then regenerate the deck  
    _only you know these_
-3. Read and rewrite in your own voice: who, core, demo, domainObject, stack, pain, character, painPoints, hook, closer, qa, pitch30, next, how, hardPart (agent-written, see .hackathon/answers.json)  
+3. Read and rewrite in your own voice: who, core, demo, domainObject, stack, pain, character, painPoints, hook, closer, qa, pitch30, next, how, hardPart, appName (agent-written, see .hackathon/answers.json)  
    _you are the one saying it on stage_
 4. The named person is a composite from your context — swap in someone real you know, or present them as an example, never as a real user  
    _everything you say has to be true_
