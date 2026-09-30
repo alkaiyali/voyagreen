@@ -1,0 +1,73 @@
+/* VoyaGreen deck theme — design only. Colour tokens come from palette.css
+   (accent #0B7A8A); never redefined here. Lane A: Satoshi + Azeret Mono.
+   Surface: flat + hairline outline. Domain object: a leaf-shaped map pin. */
+:root {
+  --font-display: "Satoshi", sans-serif;
+  --font-body: "Satoshi", sans-serif;
+  --font-mono: "Azeret Mono", ui-monospace, monospace;
+  /* the travelling hero: a leaf-shaped map pin, drawn in the palette hexes */
+  --object: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 280'%3E%3Cellipse cx='104' cy='262' rx='46' ry='9' fill='%23A4E0EC'/%3E%3Cellipse cx='104' cy='262' rx='22' ry='4.5' fill='%237CCCDB'/%3E%3Cpath d='M104 256 C80 214 26 170 26 110 C26 54 66 16 122 14 C160 13 190 22 200 26 C194 46 188 70 188 108 C188 168 132 212 104 256 Z' fill='%230B7A8A'/%3E%3Cpath d='M104 256 C132 212 188 168 188 108 C188 70 194 46 200 26 C170 70 140 140 104 256 Z' fill='%2305606D'/%3E%3Cpath d='M104 250 C122 180 150 100 198 28' fill='none' stroke='%23CAF0F7' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M122 194 C100 186 78 174 62 156 M138 158 C118 156 94 150 72 138 M160 100 C146 90 138 78 134 62 M174 68 C166 58 160 48 158 38' fill='none' stroke='%23A4E0EC' stroke-width='3.5' stroke-linecap='round'/%3E%3Ccircle cx='104' cy='112' r='26' fill='%23F4FCFE'/%3E%3Ccircle cx='104' cy='112' r='11' fill='%230B7A8A'/%3E%3C/svg%3E");
+  --topo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='640' height='640' viewBox='0 0 640 640' fill='none' stroke='%23CAF0F7' stroke-width='1.5'%3E%3Cpath d='M-20 120 C120 60 220 180 360 120 S560 40 660 110'/%3E%3Cpath d='M-20 190 C110 130 230 250 370 190 S570 110 660 180'/%3E%3Cpath d='M-20 330 C140 290 240 400 380 350 S560 270 660 320'/%3E%3Cpath d='M-20 400 C130 360 250 470 390 420 S570 340 660 390'/%3E%3Cpath d='M-20 540 C120 500 230 600 360 560 S560 480 660 530'/%3E%3Cpath d='M240 300 C260 270 320 262 350 284 C378 306 360 346 318 350 C276 354 226 334 240 300 Z'/%3E%3C/svg%3E");
+}
+
+/* ── surface: flat, outlined, a faint map-contour ground ─────────────────── */
+.slide { padding: 64px 84px; }
+.slide.cover::after,
+.slide:not(.cover):not(.flood)::after {
+  content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background: var(--topo) 0 0 / 640px 640px repeat;
+}
+.slide.cover::after { opacity: .8; }
+.slide:not(.cover):not(.flood)::after { opacity: .55;
+  -webkit-mask-image: linear-gradient(115deg, transparent 45%, #000 100%);
+          mask-image: linear-gradient(115deg, transparent 45%, #000 100%); }
+.slide.cover::after {
+  -webkit-mask-image: radial-gradient(640px 520px at 78% 45%, #000 20%, transparent 75%);
+          mask-image: radial-gradient(640px 520px at 78% 45%, #000 20%, transparent 75%); }
+
+h2 { font-size: 52px; font-weight: 900; letter-spacing: -0.035em; color: var(--text); margin-bottom: 26px; }
+
+/* ── cover ──────────────────────────────────────────────────────────────── */
+.cover { padding-right: 520px; }
+.cover h1 { font-size: 112px; font-weight: 900; line-height: .95; letter-spacing: -0.045em; margin-bottom: 28px; }
+.cover .lede { font-size: 32px; line-height: 1.3; color: var(--text); font-weight: 500; max-width: 15em; }
+.cover .kicker { margin-bottom: 22px; }
+
+/* ── problem ────────────────────────────────────────────────────────────── */
+.person {
+  font-size: 27px; line-height: 1.4; font-weight: 500; color: var(--text);
+  border-left: 4px solid var(--accent); padding: 4px 0 4px 22px; max-width: 30em; margin-bottom: 22px;
+}
+.statement { font-size: 23px; line-height: 1.45; color: var(--text-muted); max-width: 40em; margin: 0 0 18px; }
+.slide ul { margin: 0; padding-left: 0; list-style: none; max-width: 42em; }
+.slide ul li { position: relative; padding: 9px 0 9px 34px; font-size: 22px; line-height: 1.4; color: var(--text); }
+.slide ul li + li { border-top: 1px solid var(--hairline); }
+.slide ul li::before {
+  content: ""; position: absolute; left: 4px; top: 19px; width: 12px; height: 12px;
+  border-radius: 50% 0 50% 50%; transform: rotate(-45deg); background: var(--accent);
+}
+
+/* ── what we built ──────────────────────────────────────────────────────── */
+ol.steps { max-width: 38em; border-radius: 18px; box-shadow: none; border: 1px solid var(--border); padding: 10px 26px; margin-bottom: 20px; }
+ol.steps li { font-size: 21px; line-height: 1.35; }
+.flow { display: none; }                       /* the checklist + note say it better */
+.note { font-size: 20px; line-height: 1.45; color: var(--text-muted); max-width: 40em; margin: 0 0 12px; }
+ul.facts li { font-size: 18px; padding-top: 6px; padding-bottom: 6px; color: var(--text-muted); }
+ul.facts li:first-child { display: none; }   /* Backend line already says it: all in the browser */
+ul.facts li:nth-child(2) { border-top: 0; }
+ul.facts li strong { color: var(--text); font-weight: 700; }
+ul.facts li::before { top: 13px; width: 9px; height: 9px; }
+
+/* ── what's next / closer ─────────────────────────────────────────────── */
+.closing {
+  font-size: 32px; line-height: 1.25; font-weight: 700; letter-spacing: -0.02em; color: var(--text);
+  max-width: 26em; padding-top: 24px; border-top: 2px solid var(--accent);
+}
+
+/* ── the hero object travels: big on the cover, a marker elsewhere ─────── */
+.slide > .hero-object { z-index: 1; filter: drop-shadow(0 22px 30px rgba(0, 67, 76, .18)); }
+.ho-cover   { right: 90px;  top: 96px;  width: 400px; height: 520px; }
+.ho-problem { right: 70px;  top: 50px;  width: 110px; height: 140px; opacity: 1; }
+.ho-built   { right: 64px;  top: 48px;  width: 96px;  height: 122px; }
+.ho-impact  { right: -60px; top: 120px; width: 520px; height: 660px; }
+.ho-next    { right: 90px;  top: 56px;  width: 150px; height: 190px; }

@@ -1,5 +1,5 @@
 {
-  "at": 1790741717466,
+  "at": 1790742220833,
   "idea": "VoyaGreen is a mobile-first travel recommender that scores a destination's tourism pressure, suggests a lower-pressure alternative with a similar vibe when it's overcrowded, and builds a day-by-day itinerary from the traveler's interests and trip length.",
   "who": "Filipino tourists planning a local trip use it to pick a place that is as good as the famous one, without adding to the crowding and strain on it.",
   "core": "The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary.",
@@ -20,25 +20,25 @@
   "character": "Kyla, a college student in Quezon City planning her barkada's summer trip, who books Boracay because it is the first thing every TikTok and travel site shows her",
   "closer": "VoyaGreen doesn't tell travelers to stay home — it shows them somewhere just as good that the crowd hasn't found yet. Travel greener, not less.",
   "proof": [],
-  "how": "",
-  "hardPart": "",
+  "how": "Pick a place, your days and your interests. VoyaGreen scores its tourism pressure, shows the indicators behind it, and if it's High, swaps in a same-vibe place and builds your itinerary there.",
+  "hardPart": "Making the swap feel like the same trip: alternatives match on vibe, and every day slot is filled from curated activities that fit your interests, all offline, so it can't fail on stage.",
   "pitch30": "Travel apps send everyone to the same famous places, and those places pay for it. VoyaGreen checks a destination's tourism pressure before you book, and if it's overcrowded it recommends a lower-pressure place with the same vibe and builds your itinerary there. Same great trip, less strain on the places we love.",
   "qa": [
     {
       "q": "Where does the pressure score come from?",
-      "a": "For the demo it's a seeded model combining visitor density, carrying capacity, and environmental indicators per destination; the real version would pull tourism arrival and environmental data from public sources."
+      "a": "In this demo the scores are seeded and illustrative, and the app labels them demo data. Each one combines visitor density, carrying-capacity use, environmental strain and peak-season crowding. The real version would pull those indicators from public tourism-arrival and environmental data."
     },
     {
       "q": "Is the itinerary AI-generated?",
-      "a": "In this MVP it is assembled from a curated set of activities matched to your interests and trip length — no live AI call, so it never fails on stage."
+      "a": "No. In this MVP it's assembled from a curated activity list per destination, matched to your interests and trip length. There's no live AI call, so it never fails on stage."
     },
     {
       "q": "What doesn't work yet?",
-      "a": "Destination data is seeded for a handful of Philippine places, there is no booking, no accounts, and no live data feed — those are next."
+      "a": "There are only five seeded Philippine destinations, the scores are illustrative rather than measured, and there's no live data feed, no booking, no accounts and no real map. Those are next."
     },
     {
       "q": "Won't this just move the crowd to the alternative?",
-      "a": "That's why the score is live-updated in the full version — alternatives rotate as their own pressure rises, so we spread visitors instead of relocating the crowd."
+      "a": "It could, and that's the right worry. It isn't built yet, but crowd rotation is next on our list: once scores are live, alternatives rotate as their own pressure rises, so we spread visitors out instead of relocating the crowd."
     }
   ],
   "event": "",
@@ -64,7 +64,9 @@
     "closer",
     "qa",
     "pitch30",
-    "next"
+    "next",
+    "how",
+    "hardPart"
   ],
   "sources": [
     ".hackathon/context/brief.md"

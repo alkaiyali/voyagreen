@@ -1,13 +1,14 @@
 # Goals — voyagreen
 
-**Current goal: 3/7 · build — Build the demo path** (owner: driver).
+**Current goal: 4/7 · ui — Make it demo-ready** (owner: driver).
 
 Success looks like:
-- [ ] app entry point present (single index.html is enough)
-- [ ] app starts and serves real content (>300 bytes, not an empty shell)
-- [ ] no template tokens in the served page
+- [ ] no lorem ipsum or filler copy anywhere on the demo path
+- [ ] real-looking seed data so nothing is ever empty on stage
+- [ ] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
+- [ ] screenshot captured at .hackathon/evidence/ui.png
 
-Verify with `node harness.mjs check build`, advance with `node harness.mjs done`.
+Verify with `node harness.mjs check ui`, advance with `node harness.mjs done`.
 
 ## All goals
 
@@ -20,11 +21,11 @@ Verify with `node harness.mjs check build`, advance with `node harness.mjs done`
   - [x] pitch, core feature, demo path, stack, and cut list decided in SPEC.md
   - [x] demo path has 3 concrete ordered steps
   - [x] no unfilled placeholders
-- [ ] **3 · build — Build the demo path** · driver ← current
-  - [ ] app entry point present (single index.html is enough)
-  - [ ] app starts and serves real content (>300 bytes, not an empty shell)
-  - [ ] no template tokens in the served page
-- [ ] **4 · ui — Make it demo-ready** · driver
+- [x] **3 · build — Build the demo path** · driver (done 12:24)
+  - [x] app entry point present (single index.html is enough)
+  - [x] app starts and serves real content (>300 bytes, not an empty shell)
+  - [x] no template tokens in the served page
+- [ ] **4 · ui — Make it demo-ready** · driver ← current
   - [ ] no lorem ipsum or filler copy anywhere on the demo path
   - [ ] real-looking seed data so nothing is ever empty on stage
   - [ ] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
@@ -50,4 +51,4 @@ Verify with `node harness.mjs check build`, advance with `node harness.mjs done`
   - [ ] cold restart passes — the app survives being killed and restarted
   - [ ] deck and script gates still green after last-minute edits
 
-_Regenerated 2026-09-30T04:21:03.241Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
+_Regenerated 2026-09-30T04:24:30.206Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._

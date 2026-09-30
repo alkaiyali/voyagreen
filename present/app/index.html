@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>VoyaGreen — travel greener, not less</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M16 30C16 30 5 19.5 5 12.5A11 11 0 0 1 16 1.5 11 11 0 0 1 27 12.5C27 19.5 16 30 16 30Z' fill='%230B7A8A'/%3E%3Cpath d='M11 17C11 10 16 7 21 7 21 13 18 17 11 17Z' fill='%23fff'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://api.fontshare.com">
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700,900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Azeret+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="palette.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<!-- One SVG symbol, repeated everywhere: the leaf-shaped map pin. -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="pin" viewBox="0 0 32 32">
+      <path d="M16 30.5S4.5 19.6 4.5 12.3A11.5 11.5 0 0 1 16 .8a11.5 11.5 0 0 1 11.5 11.5C27.5 19.6 16 30.5 16 30.5Z" fill="currentColor"/>
+      <path d="M10.4 17.6c0-7.2 5.1-10.4 10.9-10.4 0 6.2-3.3 10.4-10.9 10.4Z" fill="#fff"/>
+      <path d="M11.6 16.4c2.4-2.9 5.1-5.3 8.3-7.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+    </symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h13m-5-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.8 19.5h18.4L12 3.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M12 10v4.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.05" fill="currentColor"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m8 12.3 2.7 2.7L16.2 9.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="12" cy="12" r="3.2" fill="currentColor"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+    <symbol id="i-cloud" viewBox="0 0 24 24"><path d="M7 18.5h10a4 4 0 0 0 .6-7.95A5.5 5.5 0 0 0 7 11a3.75 3.75 0 0 0 0 7.5Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M19.5 14.5A8 8 0 0 1 9.5 4.5a8 8 0 1 0 10 10Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24"><path d="M5 19c0-9 6-14 15-14 0 8-5 14-15 14Z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><path d="M5 19 13 11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="stage">
+  <aside class="side" aria-hidden="true">
+    <svg class="side-pin"><use href="#pin"/></svg>
+    <p class="side-name">VoyaGreen</p>
+    <p class="side-line">Same great trip.<br>Less pressure on the places we love.</p>
+  </aside>
+
+  <main class="phone" id="app" aria-live="polite">
+    <!-- Screen 1: plan -->
+    <section class="screen" data-screen="plan">
+      <header class="brand">
+        <svg class="brand-pin"><use href="#pin"/></svg>
+        <span class="brand-name">VoyaGreen</span>
+        <span class="chip-demo" title="Pressure indicators in this demo are seeded, illustrative values">demo data</span>
+      </header>
+
+      <h1 class="h1">Where are you <span class="em">headed?</span></h1>
+      <p class="lede">We’ll check how much pressure tourism puts on it — and find you somewhere just as good if it’s overcrowded.</p>
+
+      <div class="label">Destination</div>
+      <div class="dest-list" id="destList" role="radiogroup" aria-label="Destination"></div>
+
+      <div class="row-2">
+        <div>
+          <div class="label">Trip length</div>
+          <div class="stepper">
+            <button type="button" id="dMinus" aria-label="Fewer days">−</button>
+            <output id="days">3</output><span class="unit">days</span>
+            <button type="button" id="dPlus" aria-label="More days">+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="label">Interests</div>
+      <div class="chips" id="interests"></div>
+
+      <button class="btn-primary" id="checkBtn" type="button" disabled>
+        Check tourism pressure <svg class="ico"><use href="#i-arrow"/></svg>
+      </button>
+    </section>
+
+    <!-- Screen 2: pressure + swap -->
+    <section class="screen" data-screen="pressure" hidden>
+      <header class="bar">
+        <button class="back" data-go="plan" aria-label="Back"><svg class="ico"><use href="#i-back"/></svg></button>
+        <span class="bar-title">Pressure check</span>
+        <span class="chip-demo">demo data</span>
+      </header>
+
+      <div class="score-card" id="scoreCard"></div>
+      <div class="ind-list" id="indList"></div>
+
+      <div class="alt-head"><svg class="ico"><use href="#i-leaf"/></svg> A greener pick with the same vibe</div>
+      <button class="alt-card" id="altCard" type="button"></button>
+
+      <button class="btn-ghost" id="keepBtn" type="button"></button>
+    </section>
+
+    <!-- Screen 3: itinerary -->
+    <section class="screen" data-screen="trip" hidden>
+      <header class="bar">
+        <button class="back" data-go="pressure" aria-label="Back"><svg class="ico"><use href="#i-back"/></svg></button>
+        <span class="bar-title" id="tripTitle">Your trip</span>
+        <span class="chip-demo">demo data</span>
+      </header>
+
+      <div class="compare" id="compare"></div>
+      <div id="days-list"></div>
+      <p class="foot">Itinerary assembled from a curated activity list for your interests. Pressure scores are illustrative demo values.</p>
+      <button class="btn-ghost" data-go="plan" type="button">Plan another trip</button>
+    </section>
+  </main>
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

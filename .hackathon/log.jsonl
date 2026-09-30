@@ -6,3 +6,7 @@
 {"at":1790741732069,"event":"palette","phase":"spec","detail":"accent=#0B7A8A mode=light"}
 {"at":1790742059404,"event":"note","phase":"spec","detail":"Moved project from /media/cwayne/m2/testsep30 (NTFS: appends to NOTES.md hung in ntfs3 kernel driver) to ~/hackathons/vo"}
 {"at":1790742063229,"event":"advance","phase":"build","detail":"from=spec note="}
+{"at":1790742117688,"event":"intake","phase":"build","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
+{"at":1790742147092,"event":"intake","phase":"build","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
+{"at":1790742220835,"event":"intake","phase":"build","detail":"core=The pressure check and swap: pick a destination, see its tourism-pressure score with the indicators behind it, and get a greener alternative with a personalized itinerary."}
+{"at":1790742270191,"event":"advance","phase":"ui","detail":"from=build note="}
