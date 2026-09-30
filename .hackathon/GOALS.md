@@ -1,14 +1,16 @@
 # Goals — voyagreen
 
-**Current goal: 4/7 · ui — Make it demo-ready** (owner: driver).
+**Current goal: 5/7 · deck — Build the deck** (owner: pitcher).
 
 Success looks like:
-- [ ] no lorem ipsum or filler copy anywhere on the demo path
-- [ ] real-looking seed data so nothing is ever empty on stage
-- [ ] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
-- [ ] screenshot captured at .hackathon/evidence/ui.png
+- [ ] deck/slides.html exists, generated from the recorded answers
+- [ ] zero unfilled placeholders
+- [ ] no generic fonts or downloaded icon packs
+- [ ] 4–5 slides
+- [ ] numbers are measured with a source, or labelled a projection — never implied traction
+- [ ] nothing on the SPEC cut list is presented as built (only on What's next)
 
-Verify with `node harness.mjs check ui`, advance with `node harness.mjs done`.
+Verify with `node harness.mjs check deck`, advance with `node harness.mjs done`.
 
 ## All goals
 
@@ -25,12 +27,12 @@ Verify with `node harness.mjs check ui`, advance with `node harness.mjs done`.
   - [x] app entry point present (single index.html is enough)
   - [x] app starts and serves real content (>300 bytes, not an empty shell)
   - [x] no template tokens in the served page
-- [ ] **4 · ui — Make it demo-ready** · driver ← current
-  - [ ] no lorem ipsum or filler copy anywhere on the demo path
-  - [ ] real-looking seed data so nothing is ever empty on stage
-  - [ ] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
-  - [ ] screenshot captured at .hackathon/evidence/ui.png
-- [ ] **5 · deck — Build the deck** · pitcher
+- [x] **4 · ui — Make it demo-ready** · driver (done 12:24)
+  - [x] no lorem ipsum or filler copy anywhere on the demo path
+  - [x] real-looking seed data so nothing is ever empty on stage
+  - [x] no generic fonts (Inter, Roboto, JetBrains Mono…) or downloaded icon packs
+  - [x] screenshot captured at .hackathon/evidence/ui.png
+- [ ] **5 · deck — Build the deck** · pitcher ← current
   - [ ] deck/slides.html exists, generated from the recorded answers
   - [ ] zero unfilled placeholders
   - [ ] no generic fonts or downloaded icon packs
@@ -51,4 +53,4 @@ Verify with `node harness.mjs check ui`, advance with `node harness.mjs done`.
   - [ ] cold restart passes — the app survives being killed and restarted
   - [ ] deck and script gates still green after last-minute edits
 
-_Regenerated 2026-09-30T04:24:30.206Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._
+_Regenerated 2026-09-30T04:24:44.243Z by the harness from the gate definitions. Don't hand-edit the checkboxes — run the gates._

@@ -1,9 +1,9 @@
 {
   "name": "voyagreen",
-  "phase": "ui",
+  "phase": "deck",
   "startedAt": 1790741666869,
   "hours": 4,
   "deadline": "16:00",
   "skips": [],
-  "updatedAt": 1790742270190
+  "updatedAt": 1790742284234
 }
